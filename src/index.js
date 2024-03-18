@@ -15,7 +15,9 @@ app.get('/auth', (req, res) => {
 	res.send({ status: auth.getBearer() })
 })
 
-
+app.get('/', (req, res) => {
+	res.send({ "hello": "Salut Jorane" })
+})
 
 
 app.get('/spotify', (req, res) => {
