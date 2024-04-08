@@ -6,6 +6,7 @@ const querystring = require('node:querystring');
 const app = express()
 const port = 3000
 
+
 var auth = new Auth();
 auth.auth(() => {
 	console.log(auth.getBearer())
