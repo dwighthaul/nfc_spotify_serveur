@@ -34,5 +34,5 @@ jobs:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: docker-compose pull spotify_NFC && docker-compose down && docker-compose up -d
+          script:  cd ~/projects/nfc_spotify_serveur_docker/ && docker-compose pull spotify_NFC && docker-compose down && docker-compose up -d
 
