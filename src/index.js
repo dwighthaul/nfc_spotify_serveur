@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 	res.send({ "hello": "Salut Jorane" })
 })
 app.get('/test', (req, res) => {
-	res.send({ "hello": "Salut Benoit" })
+	res.send({ "hello": "Salut Benoit - 2" })
 })
 
 
