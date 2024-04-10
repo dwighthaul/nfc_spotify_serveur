@@ -17,7 +17,7 @@ app.get('/auth', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-	res.send({ "hello": "Salut Jorane" })
+	res.send({ "hello": "Salut Jorane Yo !" })
 })
 app.get('/test', (req, res) => {
 	res.send({ "hello": "Salut Benoit - 2" })
