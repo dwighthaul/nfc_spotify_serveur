@@ -1,7 +1,7 @@
 const https = require('node:https');
 const request = require('request');
 
-var redirect_uri = 'http://localhost:3000/authCredential';
+var redirect_uri = 'http://dwighthaul:3000/authCredential';
 const querystring = require('node:querystring');
 const { url } = require('node:inspector');
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
