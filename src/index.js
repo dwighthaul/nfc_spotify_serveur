@@ -36,49 +36,25 @@ app.get('/test', (req, res) => {
 })
 
 
-app.get('/authCredential', (req, res) => {
-	auth.dealLogin(req, () => {
-		auth.lancerPlaylist()
-	})
-
-	res.send({ "Status": "Login OK" })
-})
-
-
 app.get('/login', function (req, res) {
 	auth.getLogin(res);
 });
+
+app.get('/authCredential', (req, res) => {
+	auth.dealLogin(req, () => {
+		auth.lancerPlaylist((code, body) => {
+			res.send({ "code": code, "body": body })
+		})
+	})
+
+})
+
+
 
 app.get('/lancerPlaylist', function (req, res) {
 	auth.getLogin(res);
 });
 
-
-app.get('/me', (req, res) => {
-
-	console.log("spotify")
-
-	request.get("https://api.spotify.com/v1/me", {
-		headers: {
-			"Authorization": 'Bearer ' + auth.getBearer()
-		}
-
-	}, (resSpotify) => {
-		console.log(resSpotify.statusCode)
-		console.log(resSpotify.statusMessage)
-		let chunks = '';
-
-		resSpotify.on('data', function (data) {
-			console.log("DATA")
-			chunks += data;
-		}).on('end', function () {
-			const dataConcat = JSON.parse(chunks);
-			//let schema = JSON.parse(data);
-			res.send(dataConcat)
-		});
-
-	});
-})
 
 
 app.get('/start', (req, res) => {
