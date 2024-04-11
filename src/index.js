@@ -2,9 +2,11 @@ const express = require('express')
 const https = require('https');
 const Auth = require('./authService');
 const querystring = require('node:querystring');
+const request = require('request');
 
 const app = express()
 const port = 3000
+
 
 
 var auth = new Auth();
@@ -13,8 +15,18 @@ auth.auth(() => {
 })
 
 app.get('/auth', (req, res) => {
+	res.send({ bearer: auth.getBearer(), code: auth.getCode(), status: auth.getBearer() })
+})
+
+app.get('/authRefresh', (req, res) => {
+	auth.auth(() => {
+		console.log(auth.getBearer())
+	})
+
 	res.send({ status: auth.getBearer() })
 })
+
+
 
 app.get('/', (req, res) => {
 	res.send({ "hello": "Salut Jorane Yo !" })
@@ -24,6 +36,76 @@ app.get('/test', (req, res) => {
 })
 
 
+app.get('/authCredential', (req, res) => {
+	auth.dealLogin(req, () => {
+		auth.lancerPlaylist()
+	})
+
+	res.send({ "Status": "Login OK" })
+})
+
+
+app.get('/login', function (req, res) {
+	auth.getLogin(res);
+});
+
+app.get('/lancerPlaylist', function (req, res) {
+	auth.getLogin(res);
+});
+
+
+app.get('/me', (req, res) => {
+
+	console.log("spotify")
+
+	request.get("https://api.spotify.com/v1/me", {
+		headers: {
+			"Authorization": 'Bearer ' + auth.getBearer()
+		}
+
+	}, (resSpotify) => {
+		console.log(resSpotify.statusCode)
+		console.log(resSpotify.statusMessage)
+		let chunks = '';
+
+		resSpotify.on('data', function (data) {
+			console.log("DATA")
+			chunks += data;
+		}).on('end', function () {
+			const dataConcat = JSON.parse(chunks);
+			//let schema = JSON.parse(data);
+			res.send(dataConcat)
+		});
+
+	});
+})
+
+
+app.get('/start', (req, res) => {
+
+	console.log("spotify")
+
+	request.get("https://api.spotify.com/v1/me", {
+		headers: {
+			"Authorization": 'Bearer ' + auth.getBearer()
+		}
+
+	}, (resSpotify) => {
+		console.log(resSpotify.statusCode)
+		console.log(resSpotify.statusMessage)
+		let chunks = '';
+
+		resSpotify.on('data', function (data) {
+			console.log("DATA")
+			chunks += data;
+		}).on('end', function () {
+			const dataConcat = JSON.parse(chunks);
+			//let schema = JSON.parse(data);
+			res.send(dataConcat)
+		});
+
+	});
+})
 app.get('/spotify', (req, res) => {
 
 	console.log("spotify")
