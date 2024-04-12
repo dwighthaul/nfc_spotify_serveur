@@ -82,7 +82,7 @@ module.exports = class Auth {
 		const options = {
 			url: "https://api.spotify.com/v1/me/player/play?device_id=50c14080a6b470701bbf7baada526a6133acc4da",
 			body: {
-				"context_uri": "spotify:playlist:4xpuPsnCllOgsSCOmSKSU2",
+				"context_uri": "spotify:playlist:0SKGWgZ9q7TMHAVlJJVCxG",
 				"offset": {
 					"position": 0
 				},
