@@ -1,0 +1,13 @@
+
+gerer le choix des playlist
+faire marcher le refresh token
+creation de compte user (bdd)
+identifcation user (bdd)
+stocker le choix des user en bdd
+
+
+
+gerer l'authentification d'un user :
+    - authentifier un client
+    - token JWT (si possible)
+    - inclure les infos du user dans les request

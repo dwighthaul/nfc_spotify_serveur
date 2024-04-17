@@ -1,7 +1,7 @@
 const https = require('node:https');
 const request = require('request');
 
-var redirect_uri = 'http://dwighthaul:3000/authCredential';
+var redirect_uri = 'http://localhost:3000/authCredential';
 const querystring = require('node:querystring');
 const { url } = require('node:inspector');
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
@@ -45,9 +45,10 @@ module.exports = class Auth {
 
 	getLogin(res) {
 
-		var state = "OzeSpnW3t00EsMKw";
+		var state = "OzeSpnW3t00EsMKwj";
 		var scope = 'user-read-private user-modify-playback-state user-read-playback-state';
 
+		console.log('hello world');
 		res.redirect('https://accounts.spotify.com/authorize?' +
 			querystring.stringify({
 				response_type: 'code',
@@ -118,5 +119,23 @@ module.exports = class Auth {
 	getStatus() {
 		return this.loginStatus;
 	}
+
+	// var crypto = require('crypto');
+
+// const generate_state = () => {
+//     return crypto
+//     .randomBytes(60)
+//     .toString('hex')
+//     .slice(0, 16);
+//   }
 }
 
+
+// module.exports = class User {
+//     // TODO : Il y aura une gestion user_app/user_soptify qui nous permettra de faire le lien
+//     client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
+//     client_secret = 'dea14dbcfe904185b99bee1d5d75ede5';
+
+//     access_token
+//     refresh_token
+// }
