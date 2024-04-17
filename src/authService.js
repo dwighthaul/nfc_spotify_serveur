@@ -11,20 +11,15 @@ const id_playlist = ``
 
 
 module.exports = class Auth {
-
-	accessTokenBearer;
-	loginCode;
-	loginStatus;
-
 	constructor() {
 	}
 
-	auth(callback) {
-		console.log(this.loginCode)
+	auth(req, callback) {
+		console.log(req.session.loginCode)
 		const options = {
 			url: 'https://accounts.spotify.com/api/token',
 			form: {
-				code: this.loginCode,
+				code: req.session.loginCode,
 				redirect_uri: redirect_uri,
 				grant_type: 'authorization_code'
 			},
@@ -36,19 +31,16 @@ module.exports = class Auth {
 		};
 
 		request.post(options, (error, reponse, body) => {
-			console.log('body.access_token: ' + body.access_token);
-
-			this.accessTokenBearer = body.access_token
-			callback()
+			req.session.accessTokenBearer = body.access_token;
+			callback();
 		});
 	};
 
 	getLogin(res) {
 
-		var state = "OzeSpnW3t00EsMKwj";
+		var state = "OzeSpnW3t00EsMKw";
 		var scope = 'user-read-private user-modify-playback-state user-read-playback-state';
 
-		console.log('hello world');
 		res.redirect('https://accounts.spotify.com/authorize?' +
 			querystring.stringify({
 				response_type: 'code',
@@ -63,79 +55,48 @@ module.exports = class Auth {
 		console.log(`Login succes : `)
 		console.log(`Code : ` + req.query.code)
 		console.log(`State : ` + req.query.state)
-		this.loginCode = req.query.code
-		this.loginStatus = req.query.state
+		req.session.loginCode = req.query.code
+		req.session.loginStatus = req.query.state
 
-		this.auth(() => {
+		this.auth(req,() => {
 			console.log("Auth OK")
 			callback()
 		})
-
-
 	}
 
-	lancerPlaylist(callback) {
+	// lancerPlaylist(callback) {
 
-		console.log('lancerPlaylist')
-		console.log('lancerPlaylist : id_device : ' + id_device)
-		console.log('lancerPlaylist : this.accessTokenBearer : ' + this.accessTokenBearer)
+	// 	console.log('lancerPlaylist')
+	// 	console.log('lancerPlaylist : id_device : ' + id_device)
+	// 	console.log('lancerPlaylist : this.accessTokenBearer : ' + this.accessTokenBearer)
 
-		const options = {
-			url: "https://api.spotify.com/v1/me/player/play?device_id=50c14080a6b470701bbf7baada526a6133acc4da",
-			body: {
-				"context_uri": "spotify:playlist:0SKGWgZ9q7TMHAVlJJVCxG",
-				"offset": {
-					"position": 0
-				},
-				"position_ms": 0
-			},
-			headers: {
-				"Authorization": "Bearer " + this.accessTokenBearer,
-			},
-			json: true
-		};
-
-
-		request.put(options, (error, reponse, body) => {
-			console.log(error)
-			console.log("Lanc�")
-			console.log(body)
-			callback(reponse.statusCode, reponse.body)
-
-			console.log(reponse.statusCode)
-			console.log(reponse.body)
-		})
-	}
+	// 	const options = {
+	// 		url: "https://api.spotify.com/v1/me/player/play?device_id=50c14080a6b470701bbf7baada526a6133acc4da",
+	// 		body: {
+	// 			"context_uri": "spotify:playlist:0SKGWgZ9q7TMHAVlJJVCxG",
+	// 			"offset": {
+	// 				"position": 0
+	// 			},
+	// 			"position_ms": 0
+	// 		},
+	// 		headers: {
+	// 			"Authorization": "Bearer " + this.accessTokenBearer,
+	// 		},
+	// 		json: true
+	// 	};
 
 
+		// request.put(options, (error, reponse, body) => {
+		// 	console.log(error)
+		// 	console.log("Lancé")
+		// 	console.log(body)
+		// 	callback(reponse.statusCode, reponse.body)
 
-	getBearer() {
-		return this.accessTokenBearer;
-	}
-	getCode() {
-		return this.loginCode;
-	}
+		// 	console.log(reponse.statusCode)
+		// 	console.log(reponse.body)
+		// })
+// }
 
-	getStatus() {
-		return this.loginStatus;
-	}
 
-	// var crypto = require('crypto');
-
-// const generate_state = () => {
-//     return crypto
-//     .randomBytes(60)
-//     .toString('hex')
-//     .slice(0, 16);
-//   }
 }
 
-
-// module.exports = class User {
-//     // TODO : Il y aura une gestion user_app/user_soptify qui nous permettra de faire le lien
-//     client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
-//     client_secret = 'dea14dbcfe904185b99bee1d5d75ede5';
-
-//     access_token
-//     refresh_token
-// }
