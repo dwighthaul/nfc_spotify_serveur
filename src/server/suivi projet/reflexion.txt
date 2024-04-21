@@ -1,0 +1,29 @@
+--- SERVER ---
+
+Alors on veut qu'une authentification nous récupère un TOKEN valide
+
+On utilise ce token pour notre requete lancer playlist
+    => Si le token est pas bon on va en recuperer un nouveau
+    Pour ça on va se servir du refresh token qui est fournit avec le token
+
+C'est nous qui faisons le lien entre l'id unique du tag et le client (on aura une bdd pour ça)
+(chaque tag aura un id server unique (348756874) et un id client generique genre 1,2,3 etc)
+
+-> voir 1) sécurité
+
+
+--- WEB INTERFACE ---
+
+Fonctionnalités attendues:
+1) Valider une ip (on fonctionne en liste blanche) et lui donner un nom
+2) Afficher les ip validées
+3) Affichage et selection des playlist de l'utilisateur 
+4) Associée playlist et numero d'un tag
+5) Faire un login/mdp pour se connecter au web/server
+6) Faire une interface pour rentrer l'id du compte spotify
+
+
+--- SECURITE ---
+
+1) Comment ne pas stocker le mot de passe spotify ? 
+A priori pas besoin de passeport, le user peut valider a distance la requete

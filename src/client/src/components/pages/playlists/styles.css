@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px); /* Attention : doit correspondre à la taille de la navbar */
+}
+
+.dropdowns-wrapper {
+  flex: 1; /* Takes half of the vertical space */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; 
+  align-items: center; 
+}
+
+/* Set width of components within dropdowns-wrapper to 20% */
+.dropdowns-wrapper > * {
+  width: 20%;
+  height: 15%;
+}
+
+
+.validate-wrapper {
+  flex: 1; /* Takes half of the vertical space */
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.validate-wrapper button {
+  width: 200px;
+  height: 70px;
+  border-radius: 15px;
+  border: none; /* Make the border invisible */
+  font-size: 1.3em; /* Increase font size */
+  background-color: rgb(54, 219, 54);
+}
+
+ 

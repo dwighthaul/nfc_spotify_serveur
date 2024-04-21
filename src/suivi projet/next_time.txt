@@ -1,3 +1,0 @@
-Oublier ce que j'ai fait et garder la class de Paul 
-
-Voir ce qu'une instance represente (elle se fait pour chaque client ou une seul fois par serveur ?)

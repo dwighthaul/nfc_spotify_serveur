@@ -1,4 +1,0 @@
-comment differencier les url API des url "d'affichage"
-
-Je comprend pas pourquoi j'ai des messages trop de listen au port que j'utilise (on dirait a chaque fois que je 
-fais ctrl+s il re-listen )
