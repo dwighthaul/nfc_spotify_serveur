@@ -24,6 +24,18 @@ function Navbar() {
 
   window.addEventListener('resize', showButton);
 
+const handleSignUpClick = () => {
+    // Make API call when SignUp is clicked
+    fetch('http://localhost:3001/api/v1/login_spotify/auth')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
   return (
     <>
       <nav className='navbar'>
@@ -70,7 +82,7 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-          {button && <Button buttonStyle='btn--outline'>SIGN UP</Button>}
+          {button && <Button buttonStyle='btn--outline' onClick={handleSignUpClick}>SIGN UP</Button>}
         </div>
       </nav>
     </>
