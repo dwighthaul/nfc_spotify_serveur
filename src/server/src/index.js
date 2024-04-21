@@ -9,12 +9,17 @@ const groceriesRoute = require('./routes/groceries');
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
 const playlists = require('./routes/playlists');
-const cors = require('cors');
+// const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
-app.options('*', cors());
+// app.use(cors());
+// app.options('*', cors());
+ app.use((req, res, next) => {
+	console.log("add allow origine");
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+	next();
+  });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

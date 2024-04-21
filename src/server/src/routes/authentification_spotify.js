@@ -16,6 +16,7 @@ router.get('/', function (req, res) {
     // aide spotify a savoir les autorisations dont on va avoir besoin
     // TODO : la validation se fait lors d ela requpete donc il faut le faire via la web-interface avant de pouvoir utiliser le tag nfc
     var scope = 'user-read-private user-modify-playback-state user-read-playback-state playlist-read-collaborative playlist-read-private';
+    console.log("starting authentification spotify");
 
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
@@ -36,6 +37,11 @@ function get_credential_spotify(req, res)
     req.session.loginCode = req.query.code
     req.session.loginStatus = req.query.state
 
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    // res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    // res.setHeader('Access-Control-Allow-Credentials', true);
+
     const options = {
         url: 'https://accounts.spotify.com/api/token',
         form: {
@@ -52,6 +58,7 @@ function get_credential_spotify(req, res)
 
     request.post(options, (error, reponse, body) => {
         // TODO : if succes 
+
         req.session.accessTokenBearer = body.access_token;
         res.sendStatus(200);
     });

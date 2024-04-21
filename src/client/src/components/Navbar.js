@@ -25,11 +25,16 @@ function Navbar() {
   window.addEventListener('resize', showButton);
 
 const handleSignUpClick = () => {
-    // Make API call when SignUp is clicked
-    fetch('http://localhost:3001/api/v1/login_spotify/auth')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
+    fetch('http://localhost:3001/api/v1/login_spotify', {
+        method: 'GET',
+        // mode: 'no-cors'
+      })
+      .then(response => {
+        if (!response.ok) {
+          console.log("Failed to connect");
+        }
+        // Comme on utilise no-cors le response status sera toujours 0, donc impossible de savoir si ça marche..
+        //console.log(response.status);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -82,7 +87,7 @@ const handleSignUpClick = () => {
               </Link>
             </li>
           </ul>
-          {button && <Button buttonStyle='btn--outline' onClick={handleSignUpClick}>SIGN UP</Button>}
+          {button && <a href="http://localhost:3001/api/v1/login_spotify"  buttonStyle='btn--outline' >SIGN UP</a>}
         </div>
       </nav>
     </>
