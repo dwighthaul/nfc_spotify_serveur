@@ -1,0 +1,4 @@
+CORS : 
+si je met un liddleware res.setHeader('Access-Control-Allow-Origin', '*'); alors une simple requet spotify aucun soucis
+Par contre la double reidrection pour l'authentification impossible d'enlever 
+Je pense c'est parcequ'a un moment je perd le controle sur le flow de la requete 

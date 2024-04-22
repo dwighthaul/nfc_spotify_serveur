@@ -14,14 +14,16 @@ const MainComponent = () => {
           apiValue: selectedApiValue,
           hardcodedValue: selectedHardcodedValue
         };
+        console.log("hello");
       
         // Send API request using fetch
-        fetch('api/endpoint', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
+        fetch('http://localhost:3001/api/v1/playlists/', {
+          method: 'GET',
+          // method: 'POST',
+          // headers: {
+          //   'Content-Type': 'application/json'
+          // },
+          // body: JSON.stringify(payload)
         })
         .then(response => {
           if (!response.ok) {

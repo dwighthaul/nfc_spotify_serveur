@@ -6,7 +6,7 @@ const ApiDropdown = () => {
 
   useEffect(() => {
     // Make API request to fetch dropdown options
-    fetch('api/endpoint')
+    fetch('http://localhost:3001/api/v1/playlists')
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch dropdown options');
