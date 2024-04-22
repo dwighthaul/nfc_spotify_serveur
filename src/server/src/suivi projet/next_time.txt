@@ -1,2 +1,1 @@
-Je suis bloqué par la sécurité cors 
-Mon serveur sert de proxi pour ma requête spotify mais j'arrive pas a le configurer pour que ça marche (du côté client)
+Essayer de déployer sur la prod pour voir si le fait que ça soit en http au lieu de https trigger le CORS pour rien 
