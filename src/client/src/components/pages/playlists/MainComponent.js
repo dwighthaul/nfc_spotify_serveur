@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import ApiDropdown from './ApiDropDown';
 import Dropdown from './DropDown';
-import ValidateButton from './ValidateButton'
 import './styles.css'; // Import CSS styles
-import Cookies from 'js-cookie'
 
 const MainComponent = () => {
   const [selectedApiValue, setSelectedApiValue] = useState('');
@@ -15,24 +13,9 @@ const MainComponent = () => {
     // Send API request using fetch
     fetch('http://localhost:3001/setSession', {
       method: 'GET',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+      credentials: 'include'
     })
       .then(response => {
-        console.log('response.headers')
-        console.log(response.headers)
-
-        console.log('response.headers.getSetCookie()')
-        console.log(response.headers.getSetCookie())
-        var tt = Cookies.set('connect', 'test')
-        console.log('tt', tt)
-
-
-        var connect = Cookies.get()
-        console.log('connect', connect)
 
 
         if (!response.ok) {
@@ -56,14 +39,11 @@ const MainComponent = () => {
   }
 
   const getSession = () => {
-    console.log('getSession')
-    var connect = Cookies.get('connect')
-    console.log('connect')
-    console.log(connect)
 
     // Send API request using fetch
     fetch('http://localhost:3001/getSession', {
       method: 'GET',
+      credentials: 'include'
     })
       .then(response => {
         if (!response.ok) {
@@ -82,32 +62,27 @@ const MainComponent = () => {
   }
 
 
-  const handleValidate = () => {
+  const lancer = () => {
     // Construct payload
     const payload = {
-      apiValue: selectedApiValue,
+      apiValue: ApiDropdown,
       hardcodedValue: selectedHardcodedValue
     };
-    console.log("hello");
+    console.log(payload);
 
     // Send API request using fetch
-    fetch('http://localhost:3001/api/v1/playlists/', {
+    fetch('http://localhost:3001/api/v1/launch_song/?id_device=' + selectedHardcodedValue + '&playlist_uri=' + selectedApiValue, {
       method: 'GET',
-      // method: 'POST',
-      // headers: {
-      //   'Content-Type': 'application/json'
-      // },
-      // body: JSON.stringify(payload)
+      credentials: 'include'
     })
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to send API request');
         }
-        return response.json();
+
       })
       .then(data => {
-        // Handle successful response
-        console.log('API request successful:', data);
+
       })
       .catch(error => {
         // Handle error
@@ -115,35 +90,37 @@ const MainComponent = () => {
       });
   };
 
+
   return (
+
     <div className="container">
       <div className="dropdowns-wrapper">
+        <p>Playlist : {selectedApiValue}</p>
+        <br></br>
+        <p>Device : {selectedHardcodedValue}</p>
 
         <button
           title="get Session"
           color="#000000"
           onClick={() => getSession()}
-        />
+        >Get Session</button>
+
 
         <button
           title="Set Session"
           color="#000000"
           onClick={() => setSession()}
-        />
+        >Set Session</button>
+        <ApiDropdown onChange={setSelectedApiValue} />
+        <Dropdown onChange={setSelectedHardcodedValue} />
         <button
           title="Press me"
           color="#000000"
-          onClick={() => handleValidate()}
-        />
-        <ApiDropdown onChange={e => setSelectedApiValue(e.target.value)} />
-        <Dropdown onChange={e => setSelectedHardcodedValue(e.target.value)} />
+          onClick={() => lancer()}
+        >Lancer</button>
       </div>
     </div>
   );
 };
-{/* <div className="validate-wrapper">
-<ValidateButton onClick={handleValidate} />
-</div>
- */}
 
 export default MainComponent;

@@ -1,12 +1,20 @@
 // ApiDropdown.js
 import React, { useState, useEffect } from 'react';
 
-const ApiDropdown = () => {
+const ApiDropdown = (props) => {
   const [options, setOptions] = useState([]);
 
+  var handleChange = (e) => {
+    console.log(e.target.value)
+    props.onChange(e.target.value)
+  }
   useEffect(() => {
+    console.log('API dropdown loading')
     // Make API request to fetch dropdown options
-    fetch('http://localhost:3001/api/v1/playlists')
+    fetch('http://localhost:3001/api/v1/playlists', {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch dropdown options');
@@ -14,7 +22,10 @@ const ApiDropdown = () => {
         return response.json();
       })
       .then(data => {
-        setOptions(data);
+        if (data && data.items) {
+          setOptions(data.items);
+        }
+
       })
       .catch(error => {
         console.error('Error fetching dropdown options:', error);
@@ -22,9 +33,9 @@ const ApiDropdown = () => {
   }, []);
 
   return (
-    <select>
+    <select onChange={handleChange}>
       {options.map(option => (
-        <option key={option.id} value={option.value}>{option.label}</option>
+        <option key={option.uri} value={option.uri}>{option.name}</option>
       ))}
     </select>
   );
