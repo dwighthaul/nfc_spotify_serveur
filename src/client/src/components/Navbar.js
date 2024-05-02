@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from './Button';
+import { Button } from './ButtonLogin';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
@@ -24,11 +24,11 @@ function Navbar() {
 
   window.addEventListener('resize', showButton);
 
-const handleValidate = () => {
+  const handleValidate = () => {
     fetch('http://localhost:3001/api/v1/login_spotify', {
-        method: 'GET',
-        // mode: 'no-cors'
-      })
+      method: 'GET',
+      // mode: 'no-cors'
+    })
       .then(response => {
         if (!response.ok) {
           console.log("Failed to connect");
@@ -46,7 +46,7 @@ const handleValidate = () => {
   //   const redirect_uri = 'http://localhost:3001/authCredential';
   //   const state = 'OzeSpn73t00EsMKwKdfr';
   //   const scope = 'user-read-private user-modify-playback-state user-read-playback-state playlist-read-collaborative playlist-read-private';
-    
+
   //   // Redirect user to Spotify authorization page
   //   window.location.href = 'https://accounts.spotify.com/authorize?' +
   //     new URLSearchParams({
@@ -97,7 +97,7 @@ const handleValidate = () => {
 
   // const handleValidate = () => { 
   //   console.log("hello");
-  
+
   //   // Send API request using fetch
   //   fetch('http://localhost:3001/api/v1/login_spotify', {
   //     method: 'GET',
@@ -170,8 +170,8 @@ const handleValidate = () => {
               </Link>
             </li>
           </ul>
-          {button && <Button buttonStyle='btn--outline' onClick={handleValidate}>SIGN UP</Button>}
-          {/* {button && <a href="http://localhost:3001/api/v1/login_spotify?redirect_url=http://localhost:3000/"  buttonStyle='btn--outline' >SIGN UP</a>} */}
+          {/* button && <Button buttonStyle='btn--outline' onClick={handleValidate}>SIGN UP</Button> */}
+          {button && <a target="_blank" href="http://localhost:3001/api/v1/login_spotify" buttonStyle='btn--outline' >SIGN UP</a>}
         </div>
       </nav>
     </>
