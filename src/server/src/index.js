@@ -14,13 +14,35 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
-app.options('*', cors());
- app.use((req, res, next) => {
-	console.log("add allow origine");
-	res.setHeader('Access-Control-Allow-Origin', '*');
+// Add headers before the routes are defined
+app.use(function (req, res, next) {
+
+	// Website you wish to allow to connect
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+	// Request methods you wish to allow
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+	// Request headers you wish to allow
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+	// Set to true if you need the website to include cookies in the requests sent
+	// to the API (e.g. in case you use sessions)
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	// Pass to next layer of middleware
 	next();
-  });
+});
+
+
+app.use(cors());
+app.use((req, res, next) => {
+	console.log('req.session');
+	console.log(req.session);
+
+
+	next();
+});
+
 
 // Module installé recemment cors, memorystore
 
@@ -32,15 +54,19 @@ app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
-		saveUninitialized: false,
-		cookie: { 
-			secure: true,            //setting this false for http connections
-			maxAge: 3600000,
-			expires: new Date(Date.now() + 3600000) 
-		}
+		saveUninitialized: false
 	})
 );
 
+app.get('/setSession', (req, res) => {
+	req.session.user = { id: 1, username: 'example' };
+	res.send({ 'msg': 'Session set' });
+});
+
+app.get('/getSession', (req, res) => {
+	const user = req.session;
+	res.json(user);
+});
 
 app.use('/api/v1/login_spotify', login_spotify.router);
 app.use('/api/v1/launch_song', launch_song);
@@ -50,7 +76,7 @@ app.use('/api/v1/playlists', playlists);
 // Je pourrais modifier le dashboard spotify pour qu'il redirige directement vers api/v1/login_spotify mais pour l'instant
 // pour pas trop perturber j'encapsule ça dans une fonction
 app.get('/authCredential', (req, res) => {
-	login_spotify.get_credential_spotify(req,res);
+	login_spotify.get_credential_spotify(req, res);
 })
 
 

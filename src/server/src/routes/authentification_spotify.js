@@ -18,7 +18,7 @@ router.get('/', function (req, res) {
     // TODO : la validation se fait lors d ela requpete donc il faut le faire via la web-interface avant de pouvoir utiliser le tag nfc
     var scope = 'user-read-private user-modify-playback-state user-read-playback-state playlist-read-collaborative playlist-read-private';
     req.session.redirect_url = req.query.redirect_url;
-    
+
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
@@ -30,8 +30,7 @@ router.get('/', function (req, res) {
 });
 
 
-function get_credential_spotify(req, res) 
-{
+function get_credential_spotify(req, res) {
     console.log(`Login succes : `)
     console.log(`Code : ` + req.query.code)
     console.log(`State : ` + req.query.state)
@@ -60,20 +59,18 @@ function get_credential_spotify(req, res)
     request.post(options, (error, reponse, body) => {
         // TODO : if succes 
         console.log("session id fin =", req.session.id);
+        console.log("body.access_token =", body.access_token);
         req.session.accessTokenBearer = body.access_token;
-        const redirectUrl = req.session.redirect_url;
-        if (!redirectUrl) {
-            return res.status(400).send('Redirect URL is required');
-        }
-        res.redirect(redirectUrl);
+        res.send("<script>window.close();</script >");
+
     });
 }
 
 
 router.get('/auth', (req, res) => {
-	res.send({ accessTokenBearer: req.session.accessTokenBearer, loginCode: req.session.loginCode, loginStatus: req.session.loginStatus })
+    res.send({ accessTokenBearer: req.session.accessTokenBearer, loginCode: req.session.loginCode, loginStatus: req.session.loginStatus })
 })
 
 
-module.exports = { router : router, get_credential_spotify : get_credential_spotify };
+module.exports = { router: router, get_credential_spotify: get_credential_spotify };
 // module.exports = router;

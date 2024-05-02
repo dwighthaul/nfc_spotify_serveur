@@ -9,24 +9,22 @@ const request = require('request');
 // TODO : gerer le cas ou le bearer n'a pas été obtenu
 // Necesitte d'avoir le bearer des la connexion du user sur le serveur
 
-router.get('/hello', function (req, res) 
-{
+router.get('/hello', function (req, res) {
     console.log(req.session.id);
     console.log("HEYYYYYYYYYYYYYYYY");
 })
 
 
-router.get('/', function (req, res) 
-{
+router.get('/', function (req, res) {
     const bearer = req.session.accessTokenBearer;
-    console.log("HEYYYYYYYYYYYYYYYY");
+    console.log("bearer ?");
     console.log(bearer);
     console.log(req.session.id);
     const options = {
         url: 'https://api.spotify.com/v1/me',
         headers: {
             'Authorization': "Bearer " + req.session.accessTokenBearer,
-        },  
+        },
         json: true  // si on ne met pas ce champ il faut parser le body avec JSON.parse(body)     
     };
     request.get(options, (error, response, body) => {
