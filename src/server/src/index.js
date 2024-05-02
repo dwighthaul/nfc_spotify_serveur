@@ -33,20 +33,14 @@ app.use(function (req, res, next) {
 	next();
 });
 
+app.use(cors({
+	origin: 'http://localhost:3000',
+	credentials: true
+}))
 
-app.use(cors());
-app.use((req, res, next) => {
-	console.log('req.session');
-	console.log(req.session);
-
-
-	next();
-});
 
 
 // Module installé recemment cors, memorystore
-
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -54,17 +48,34 @@ app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
+		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
+
 	})
 );
 
+
+app.use((req, res, next) => {
+	console.log('=============');
+	console.log(req.session);
+	console.log('=============');
+
+	next();
+});
+
+
+
 app.get('/setSession', (req, res) => {
-	req.session.user = { id: 1, username: 'example' };
 	res.send({ 'msg': 'Session set' });
 });
 
 app.get('/getSession', (req, res) => {
+	console.log('getSession + =============');
+	console.log(req.session);
+	console.log('getSession + =============');
+
 	const user = req.session;
+
 	res.json(user);
 });
 
@@ -82,9 +93,8 @@ app.get('/authCredential', (req, res) => {
 
 app.get('/', (req, res) => {
 	console.log("hello world");
-	res.sendStatus(200);
+	res.send(req.session);
 })
-
 
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)

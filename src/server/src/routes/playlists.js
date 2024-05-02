@@ -28,10 +28,8 @@ router.get('/', function (req, res) {
         json: true  // si on ne met pas ce champ il faut parser le body avec JSON.parse(body)     
     };
     request.get(options, (error, response, body) => {
-        if (!response.ok) {
-            console.log("Couldn't get user id");
-            return res.status(400).send("Coudn't get playlist");
-        }
+        console.log(response.statusCode)
+
         req.session.user_id = body.id;
         const options = {
             url: "https://api.spotify.com/v1/users/" + req.session.user_id + "/playlists",
@@ -43,7 +41,9 @@ router.get('/', function (req, res) {
         request.get(options, (error, response, body) => {
             // ça marchait pas car j'avais oublié de donner le scop mais je trouve que l'erreur est vrmt pas explicite
             console.log(response.statusCode);
-            res.json(body);
+            console.log(body?.items?.length);
+
+            res.send(body);
         });
     });
 })

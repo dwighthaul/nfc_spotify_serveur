@@ -8,15 +8,13 @@ const id_device = `24108c66d1e10306791f56d29d7f220cef0587cf`;
 
 router.get('/', function (req, res) {
 
-	console.log('lancerPlaylist');
-    console.log('lancerPlaylist : id_device : ' + id_device);
-    console.log('lancerPlaylist : this.accessTokenBearer : ' + req.session.accessTokenBearer);
+    console.log('Lancement de la playlist : ' + req.query.playlist_uri + ' sur le device : ' + req.query.id_device);
 
     const options = {
         url: "https://api.spotify.com/v1/me/player/play",
-        device_id: id_device,
+        device_id: req.query.id_device,
         body: {
-            "context_uri": "spotify:playlist:0SKGWgZ9q7TMHAVlJJVCxG",
+            "context_uri": req.query.playlist_uri,
             "offset": {
                 "position": 0
             },
@@ -30,11 +28,7 @@ router.get('/', function (req, res) {
 
 
     request.put(options, (error, reponse, body) => {
-        console.log(error)
         console.log("Lancé")
-        console.log(body)
-        console.log(reponse.statusCode)
-        console.log(reponse.body)
     })
 });
 
