@@ -10,28 +10,8 @@ function Playlists() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [button, setButton] = useState(true);
+  const [button] = useState(true);
 
-
-  const getPlaylist = () => {
-    ServerService.fetchPlaylists((data) => {
-
-      if (data && data.items) {
-        setPlaylist(data.items);
-        setLoading(false);
-
-      } else {
-        setError(error);
-        setLoading(false);
-
-      }
-
-    }, (error) => {
-
-      setError(error);
-      setLoading(false);
-    });
-  }
 
 
   const lancer = () => {
@@ -43,27 +23,48 @@ function Playlists() {
     })
 
   }
-  const getDevices = () => {
-    ServerService.fetchDevices((data) => {
-
-      if (data && data.devices) {
-        setDevices(data.devices);
-        setLoading(false);
-
-      } else {
-        setError(error);
-        setLoading(false);
-      }
-
-    }, (error) => {
-
-      setError(error);
-      setLoading(false);
-    });
-  }
-
 
   useEffect(() => {
+
+    const getPlaylist = () => {
+      ServerService.fetchPlaylists((data) => {
+
+        if (data && data.items) {
+          setPlaylist(data.items);
+          setLoading(false);
+
+        } else {
+          setError(error);
+          setLoading(false);
+
+        }
+
+      }, (error) => {
+
+        setError(error);
+        setLoading(false);
+      });
+    }
+
+
+    const getDevices = () => {
+      ServerService.fetchDevices((data) => {
+
+        if (data && data.devices) {
+          setDevices(data.devices);
+          setLoading(false);
+
+        } else {
+          setError(error);
+          setLoading(false);
+        }
+
+      }, (error) => {
+
+        setError(error);
+        setLoading(false);
+      });
+    }
     getPlaylist();
     getDevices();
   }, []); // Empty dependency array ensures this effect runs only once after the initial render
@@ -81,20 +82,20 @@ function Playlists() {
       {button && <a target="_blank" rel="noreferrer" href="http://localhost:3001/api/v1/login_spotify" buttonstyle='btn--outline' >SIGN UP</a>}
 
       <select onChange={(e) => setselectedPlaylist(e.target.value)}>
-        <option value=""></option>
+        <option value="" disabled selected>Sélectionner une playlist</option>
         {playlists.map(option => (
-          <option value={option.uri}>{option.name}</option>
+          <option value={option.uri} key={option.uri}>{option.name}</option>
         ))}
       </select>
 
       <select onChange={(e) => setSelectedDevice(e.target.value)}>
-        <option value=""></option>
+        <option value="" disabled selected >Sélectionner un device</option>
         {devices.map(option => (
-          <option value={option.id}>{option.name} - {option.type}</option>
+          <option value={option.id} key={option.id}>{option.name} - {option.type}</option>
         ))}
       </select>
 
-      <button
+      <button className='float_r'
         title="Lancer"
         color="#000000"
         onClick={() => lancer()}

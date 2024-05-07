@@ -1,6 +1,8 @@
 import React from 'react';
 
 function Home() {
+
+
   return (
     <>
       <h1>Spotify Connect </h1>
@@ -17,6 +19,9 @@ function Home() {
       </div>
     </>
   );
+
 }
 
-export default Home;
+
+
+export default Home

@@ -4,8 +4,6 @@ const BASE_URL = 'http://localhost:3001'
 
 class ServerService {
 
-	constructor() {
-	}
 	// Private function
 	static #getData(endPoint, httpMethod, callbackSuccess, callbackError) {
 
@@ -16,10 +14,8 @@ class ServerService {
 			mode: 'cors'
 		})
 			.then(response => {
-				console.log(response)
-				//				callbackError(response)
 				if (!response.ok) {
-					callbackError("error")
+					callbackError(response)
 					throw new Error('Failed to fetch data');
 				}
 				return response.json();
@@ -34,8 +30,6 @@ class ServerService {
 	}
 	// Private function
 	static #postData(endPoint, httpMethod, body, callbackSuccess, callbackError) {
-		console.log("fetchPlaylists - ICI - 2")
-		console.log(body)
 
 		fetch(`${BASE_URL}/${endPoint}`, {
 			headers: { 'Content-Type': 'application/json' },

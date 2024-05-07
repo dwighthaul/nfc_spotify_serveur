@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import './SignIn.css'; // Importation de la feuille de style CSS
 import ServerService from '../../services/ServerService';
-import { useHistory } from "react-router-dom";
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  let history = useHistory()
 
   const navigate = useNavigate();
 
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (event) => {
+    event.preventDefault();
     ServerService.sendLogin(username, password, () => {
-      history.push('/home')
+      console.log("Login OK")
       navigate("/home");
 
     }, () => {
+      console.log("Login OK")
 
     })
 
@@ -31,16 +29,16 @@ const SignIn = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Email:</label>
+          <label htmlFor="username">Email:</label><br />
           <input
-            type="username"
+            type="text"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Password:</label><br />
           <input
             type="password"
             id="password"

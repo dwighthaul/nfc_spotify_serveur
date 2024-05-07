@@ -1,30 +1,37 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import './AppCss.css';
+
 import Navbar from './components/Navbar';
 import Home from './components/pages/Home/Home.js';
-import SignIn from './components/pages/SignIn/SignIn.js';
-import Playlists from './components/pages/Playlists/Playlists.js';
 import Page404 from './components/pages/Page404/Page404.js';
+import Playlists from './components/pages/Playlists/Playlists.js';
+import SignIn from './components/pages/SignIn/SignIn.js';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Navbar />
-      <div className='app'>
-        <div className='app-container'>
-          <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/home' exact component={Home} />
-            <Route path='/playlist' exact component={Playlists} />
-            <Route path='/sign-in' component={SignIn} />
-            <Route path='/404' component={Page404} />
-            <Route path='*' component={Page404} />
-          </Switch>
+export default class App extends React.Component {
+
+
+
+  render() {
+    return (
+      <BrowserRouter>
+        <Navbar />
+        <div className='app'>
+          <div className='app-container'>
+            <Routes>
+              <Route path='/' exact element={<Home />} />
+              <Route path='/home' exact element={<Home />} />
+              <Route path='/playlist' exact element={<Playlists />} />
+              <Route path='/sign-in' element={<SignIn />} />
+              <Route path='/404' element={<Page404 />} />
+              <Route path='*' element={<Page404 />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
-  );
+      </BrowserRouter>
+    );
+  }
+
 }
 
-export default App;
