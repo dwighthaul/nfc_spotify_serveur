@@ -3,21 +3,20 @@ const router = Router();
 
 const request = require('request');
 
-const id_device = `24108c66d1e10306791f56d29d7f220cef0587cf`;
-
-
+// Gestionnaire de route pour lancer la lecture d'une playlist Spotify sur un appareil spécifique.
 router.get('/', function (req, res) {
 
-    console.log('Lancement de la playlist : ' + req.query.playlist_uri + ' sur le device : ' + req.query.id_device);
+    // Extraction de l'URI de la playlist et de l'identifiant de l'appareil à partir des paramètres de requête.
+    const playlistUri = req.query.playlist_uri;
+    const deviceId = req.query.id_device;
+    console.log(req.query)
 
+    // Construction des options de requête pour lancer la lecture de la playlist.
     const options = {
-        url: "https://api.spotify.com/v1/me/player/play",
-        device_id: req.query.id_device,
+        url: "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId,
         body: {
-            "context_uri": req.query.playlist_uri,
-            "offset": {
-                "position": 0
-            },
+            "context_uri": playlistUri,
+            "offset": { "position": 0 },
             "position_ms": 0
         },
         headers: {
@@ -26,12 +25,17 @@ router.get('/', function (req, res) {
         json: true
     };
 
-
-    request.put(options, (error, reponse, body) => {
-        console.log("Lancé")
-    })
+    // Effectue une requête PUT à l'API Spotify pour démarrer la lecture.
+    request.put(options, (error, response, body) => {
+        //console.log(response)
+        console.log(body)
+        if (error) {
+            console.error("Erreur lors du démarrage de la lecture:", error);
+            return res.status(500).send("Erreur lors du démarrage de la lecture");
+        }
+        console.log("Lecture démarrée avec succès");
+        res.status(200).send("Lecture démarrée avec succès");
+    });
 });
-
-
 
 module.exports = router;

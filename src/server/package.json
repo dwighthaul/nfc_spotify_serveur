@@ -15,6 +15,10 @@
 		"express-session": "^1.18.0",
 		"memorystore": "^1.6.7",
 		"nodemon": "^3.1.0",
-		"request": "^2.88.2"
+		"pg": "^8.11.5",
+		"pg-hstore": "^2.3.4",
+		"postgres": "^3.4.4",
+		"request": "^2.88.2",
+		"sequelize": "^6.37.3"
 	}
 }

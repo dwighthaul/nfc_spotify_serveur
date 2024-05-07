@@ -8,8 +8,11 @@ var port = 3001;
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
 const playlists = require('./routes/playlists');
+const devices = require('./routes/devices');
 const cors = require('cors');
-//const MemoryStore = require('memorystore')(session); // Use a memory store for demo purposes
+const SQLConnection = require('./controller/SQLConnection');
+const userController = require('./controller/UserController');
+const authentication = require('./controller/Authentication');
 
 
 const app = express();
@@ -38,6 +41,12 @@ app.use(cors({
 	credentials: true
 }))
 
+let c = new SQLConnection();
+c.connect().then(() => {
+	c.syncDatabase()
+})
+
+
 
 
 // Module installé recemment cors, memorystore
@@ -55,6 +64,31 @@ app.use(
 );
 
 
+app.get('/getUsers', (req, res) => {
+	userController.getUsers().then((data) => {
+		res.send(data);
+	});
+});
+
+
+app.post('/login', (req, res) => {
+
+	console.log(req.body)
+
+	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
+		if (result.status === "KO") {
+			res.sendStatus(400).send(result.data)
+			return
+		}
+		if (result.status === "OK") {
+			req.session.user = result.data
+			res.send(result.data)
+		}
+
+	});
+});
+
+
 app.use((req, res, next) => {
 	console.log('=============');
 	console.log(req.session);
@@ -65,14 +99,10 @@ app.use((req, res, next) => {
 
 
 
-app.get('/setSession', (req, res) => {
-	res.send({ 'msg': 'Session set' });
-});
-
 app.get('/getSession', (req, res) => {
-	console.log('getSession + =============');
+	console.log('=============');
 	console.log(req.session);
-	console.log('getSession + =============');
+	console.log('=============');
 
 	const user = req.session;
 
@@ -82,6 +112,7 @@ app.get('/getSession', (req, res) => {
 app.use('/api/v1/login_spotify', login_spotify.router);
 app.use('/api/v1/launch_song', launch_song);
 app.use('/api/v1/playlists', playlists);
+app.use('/api/v1/devices', devices);
 
 
 // Je pourrais modifier le dashboard spotify pour qu'il redirige directement vers api/v1/login_spotify mais pour l'instant

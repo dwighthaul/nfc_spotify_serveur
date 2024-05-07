@@ -4,11 +4,6 @@ const router = Router();
 const request = require('request');
 
 
-// j'avais mis un if (if non definit aller le chercher, mais commec'est asynchrone j'appelais le get_playlist avant)
-// Faudra réussir a le gerer, c'est pas opti d'appeler cette fct a chaque fois 
-// TODO : gerer le cas ou le bearer n'a pas été obtenu
-// Necesitte d'avoir le bearer des la connexion du user sur le serveur
-
 router.get('/hello', function (req, res) {
     console.log(req.session.id);
     console.log("HEYYYYYYYYYYYYYYYY");
