@@ -1,0 +1,86 @@
+/* CSS pour la page de création de compte */
+
+/* Conteneur principal */
+.signup-container {
+	width: 100%;
+	/* Pour prendre toute la largeur de l'écran */
+	height: 80vh;
+	/* Pour prendre toute la hauteur de l'écran */
+	padding: 40px;
+	/* Ajout de transparence */
+	/* Pour que l'image reste fixe pendant le défilement */
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+/* Titre */
+.signup-container h2 {
+	font-size: 32px;
+	margin-bottom: 20px;
+	color: #333;
+	font-family: 'Arial', sans-serif;
+}
+
+/* Formulaire */
+.signup-container form {
+	width: 100%;
+	max-width: 400px;
+}
+
+/* Étiquettes des champs */
+.signup-container label {
+	font-size: 18px;
+	margin-bottom: 10px;
+	color: #555;
+}
+
+/* Champs de saisie */
+.signup-container input {
+	padding: 12px;
+	margin-bottom: 20px;
+	border: none;
+	border-radius: 8px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s ease;
+}
+
+.signup-container input:focus {
+	outline: none;
+	box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+}
+
+/* Bouton */
+.signup-container button {
+	padding: 12px;
+	background-color: #ff7f50;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 18px;
+	transition: background-color 0.3s ease;
+}
+
+.signup-container button:hover {
+	background-color: #ff6347;
+}
+
+/* Texte supplémentaire */
+.signup-container p {
+	font-size: 16px;
+	color: #777;
+	margin-top: 20px;
+}
+
+.signup-container a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+.signup-container a:hover {
+	text-decoration: underline;
+}
