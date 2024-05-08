@@ -3,7 +3,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-var port = 3001;
+var port = 3000;
 
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
@@ -37,7 +37,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(cors({
-	origin: 'http://localhost:3000',
+	origin: 'https://client.dwighthaul:3001',
 	credentials: true
 }))
 
