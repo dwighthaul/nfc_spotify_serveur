@@ -1,139 +1,131 @@
-const express = require('express')
-const https = require('https');
-const Auth = require('./authService');
-const querystring = require('node:querystring');
-const request = require('request');
-
-const app = express()
-const port = 3000
 
 
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+var port = 3001;
 
-var auth = new Auth();
-auth.auth(() => {
-	console.log(auth.getBearer())
+const login_spotify = require('./routes/authentification_spotify');
+const launch_song = require('./routes/launch_song');
+const playlists = require('./routes/playlists');
+const devices = require('./routes/devices');
+const cors = require('cors');
+const SQLConnection = require('./controller/SQLConnection');
+const userController = require('./controller/UserController');
+const authentication = require('./controller/Authentication');
+
+
+const app = express();
+
+// Add headers before the routes are defined
+app.use(function (req, res, next) {
+
+	// Website you wish to allow to connect
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+	// Request methods you wish to allow
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+	// Request headers you wish to allow
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+	// Set to true if you need the website to include cookies in the requests sent
+	// to the API (e.g. in case you use sessions)
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	// Pass to next layer of middleware
+	next();
+});
+
+app.use(cors({
+	origin: 'http://localhost:3000',
+	credentials: true
+}))
+
+let c = new SQLConnection();
+c.connect().then(() => {
+	c.syncDatabase()
 })
 
-app.get('/auth', (req, res) => {
-	res.send({ bearer: auth.getBearer(), code: auth.getCode(), status: auth.getBearer() })
-})
 
-app.get('/authRefresh', (req, res) => {
-	auth.auth(() => {
-		console.log(auth.getBearer())
+
+
+// Module installé recemment cors, memorystore
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(
+	session({
+		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
+		resave: false,
+		saveUninitialized: false,
+		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
+
 	})
+);
 
-	res.send({ status: auth.getBearer() })
+
+app.get('/getUsers', (req, res) => {
+	userController.getUsers().then((data) => {
+		res.send(data);
+	});
+});
+
+
+app.post('/login', (req, res) => {
+
+	console.log(req.body)
+
+	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
+		if (result.status === "KO") {
+			res.sendStatus(400).send(result.data)
+			return
+		}
+		if (result.status === "OK") {
+			req.session.user = result.data
+			res.send(result.data)
+		}
+
+	});
+});
+
+
+app.use((req, res, next) => {
+	console.log('=============');
+	console.log(req.session);
+	console.log('=============');
+
+	next();
+});
+
+
+
+app.get('/getSession', (req, res) => {
+	console.log('=============');
+	console.log(req.session);
+	console.log('=============');
+
+	const user = req.session;
+
+	res.json(user);
+});
+
+app.use('/api/v1/login_spotify', login_spotify.router);
+app.use('/api/v1/launch_song', launch_song);
+app.use('/api/v1/playlists', playlists);
+app.use('/api/v1/devices', devices);
+
+
+// Je pourrais modifier le dashboard spotify pour qu'il redirige directement vers api/v1/login_spotify mais pour l'instant
+// pour pas trop perturber j'encapsule ça dans une fonction
+app.get('/authCredential', (req, res) => {
+	login_spotify.get_credential_spotify(req, res);
 })
-
 
 
 app.get('/', (req, res) => {
-	res.send({ "hello": "Salut Jorane Yo !" })
+	console.log("hello world");
+	res.send(req.session);
 })
-app.get('/test', (req, res) => {
-	res.send({ "hello": "Salut Benoit - 2" })
-})
-
-
-app.get('/login', function (req, res) {
-	auth.getLogin(res);
-});
-
-app.get('/authCredential', (req, res) => {
-	auth.dealLogin(req, () => {
-		auth.lancerPlaylist((code, body) => {
-			res.send({ "code": code, "body": body })
-		})
-	})
-
-})
-
-
-
-app.get('/lancerPlaylist', function (req, res) {
-	auth.getLogin(res);
-});
-
-
-
-app.get('/start', (req, res) => {
-
-	console.log("spotify")
-
-	request.get("https://api.spotify.com/v1/me", {
-		headers: {
-			"Authorization": 'Bearer ' + auth.getBearer()
-		}
-
-	}, (resSpotify) => {
-		console.log(resSpotify.statusCode)
-		console.log(resSpotify.statusMessage)
-		let chunks = '';
-
-		resSpotify.on('data', function (data) {
-			console.log("DATA")
-			chunks += data;
-		}).on('end', function () {
-			const dataConcat = JSON.parse(chunks);
-			//let schema = JSON.parse(data);
-			res.send(dataConcat)
-		});
-
-	});
-})
-app.get('/spotify', (req, res) => {
-
-	console.log("spotify")
-
-	https.get("https://api.spotify.com/v1/playlists/1neO2bS5TBpEWPMerNhl5d", {
-		headers: {
-			"Authorization": 'Bearer ' + auth.getBearer()
-		}
-
-	}, (resSpotify) => {
-		console.log(resSpotify.statusCode)
-		console.log(resSpotify.statusMessage)
-		let chunks = '';
-
-		resSpotify.on('data', function (data) {
-			console.log("DATA")
-			chunks += data;
-		}).on('end', function () {
-			const dataConcat = JSON.parse(chunks);
-			//let schema = JSON.parse(data);
-			res.send(dataConcat)
-		});
-
-	});
-})
-app.get('/ids', (req, res) => {
-
-	console.log("spotify#ids")
-
-	https.get("https://api.spotify.com/v1/me/player/devices", {
-		headers: {
-			"Authorization": 'Bearer ' + auth.getBearer()
-		}
-
-	}, (resSpotify) => {
-		console.log(resSpotify.statusCode)
-		console.log(resSpotify.statusMessage)
-		let chunks = '';
-
-		resSpotify.on('data', function (data) {
-			console.log("DATA")
-			console.log(data)
-			chunks += data;
-		}).on('end', function () {
-			const dataConcat = JSON.parse(chunks);
-			res.send(dataConcat)
-		});
-
-	});
-
-})
-
 
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)
