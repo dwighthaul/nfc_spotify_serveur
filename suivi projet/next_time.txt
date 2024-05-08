@@ -1,0 +1,1 @@
+Essayer de déployer sur la prod pour voir si le fait que ça soit en http au lieu de https trigger le CORS pour rien 

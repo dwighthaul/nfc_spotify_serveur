@@ -1,0 +1,4 @@
+CORS : 
+J'arrive a contourner le probleme avec un href sauf que si je fais ça j'ai pas le meme session id qu'avec des commands react
+Si je passe par [window.location.href = 'https://accounts.spotify.com/authorize?...] ça marche aussi mais je perd le context javascript apres la redirection.. 
+(et en plus je suis pas capable de revenir sur la page de base vu que je peux pas donner cette info sur a redirection de spotify)
