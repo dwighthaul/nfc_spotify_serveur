@@ -40,13 +40,13 @@ app.use(cors({
 	origin: 'https://client.dwighthaul:3001',
 	credentials: true
 }))
-
+/*
 let c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
 })
 
-
+*/
 
 
 // Module installé recemment cors, memorystore
@@ -63,14 +63,14 @@ app.use(
 	})
 );
 
-
+/*
 app.get('/getUsers', (req, res) => {
 	userController.getUsers().then((data) => {
 		res.send(data);
 	});
 });
 
-
+*/
 app.post('/login', (req, res) => {
 
 	console.log(req.body)
