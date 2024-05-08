@@ -21,7 +21,7 @@ const app = express();
 app.use(function (req, res, next) {
 
 	// Website you wish to allow to connect
-	res.setHeader('Access-Control-Allow-Origin', 'https://main.d3gyx44niy20b6.amplifyapp.com/playlist');
+	res.setHeader('Access-Control-Allow-Origin', 'https://main.d3gyx44niy20b6.amplifyapp.com');
 	// Request methods you wish to allow
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
