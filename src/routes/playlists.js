@@ -3,11 +3,29 @@ const router = Router();
 
 const request = require('request');
 
+//  TODO : Refacto 
+/*
+class SpotifyRouring () {
+    // Matcher route et fonction a appeler 
+    v1/device => Spotify.getDevices()
+    v1/playlist => Spotify.getPlaylist()
+}
+ 
 
-router.get('/hello', function (req, res) {
-    console.log(req.session.id);
-    console.log("HEYYYYYYYYYYYYYYYY");
-})
+class Spotify () {
+
+    private urlSpotify;
+    private tokenBearer;
+    private idUser;
+
+
+    login()
+
+    getPlaylist()
+
+
+}
+*/
 
 
 router.get('/', function (req, res) {

@@ -54,11 +54,9 @@ class UserController {
 						this.sqlConnection.sequelize.fn('lower', this.sqlConnection.sequelize.col('passwordHash')),
 						this.sqlConnection.sequelize.fn('lower', btoa(password))
 					)
-
 				]
 			}
 		});
-
 	}
 
 	async initData() {
@@ -72,7 +70,6 @@ class UserController {
 			console.log("Users data have been saved")
 		});
 	}
-
 }
 const userController = new UserController();
 

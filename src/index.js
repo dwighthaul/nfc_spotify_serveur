@@ -3,7 +3,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-var port = 3001;
+var port = 3000;
 
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
@@ -17,27 +17,20 @@ const authentication = require('./controller/Authentication');
 
 const app = express();
 
-// Add headers before the routes are defined
+// TODO : A garder ?
+/*
 app.use(function (req, res, next) {
-
-	// Website you wish to allow to connect
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-	// Request methods you wish to allow
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-	// Request headers you wish to allow
 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-	// Set to true if you need the website to include cookies in the requests sent
-	// to the API (e.g. in case you use sessions)
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
-	// Pass to next layer of middleware
 	next();
 });
+*/
 
 app.use(cors({
-	origin: 'http://localhost:3000',
+	origin: 'http://localhost:3001',
 	credentials: true
 }))
 
@@ -73,7 +66,7 @@ app.get('/getUsers', (req, res) => {
 
 app.post('/login', (req, res) => {
 
-	console.log(req.body)
+	console.log('LOGIN')
 
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
@@ -84,7 +77,6 @@ app.post('/login', (req, res) => {
 			req.session.user = result.data
 			res.send(result.data)
 		}
-
 	});
 });
 
@@ -123,7 +115,6 @@ app.get('/authCredential', (req, res) => {
 
 
 app.get('/', (req, res) => {
-	console.log("hello world");
 	res.send(req.session);
 })
 
