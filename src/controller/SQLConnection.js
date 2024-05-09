@@ -1,12 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const User = require('../model/User');
 const UserController = require('./UserController');
 
 class SQLConnection {
 	sequelize;
 
 	async connect() {
-		this.sequelize = new Sequelize('postgres://postgres:root@localhost:5432/NFT_spotify_DB',
+		this.sequelize = new Sequelize('postgres://postgres:root@localhost:5432/nfc_spotify_db',
 			{
 				logging: false, // Disables logging
 			}
