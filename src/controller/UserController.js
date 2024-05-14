@@ -1,6 +1,7 @@
 
 const { DataTypes, Op } = require('sequelize');
 const User = require('../model/User');
+const NFCTags = require('../model/NFCTags');
 
 class UserController {
 	initSchema(SQLConnection) {
@@ -36,8 +37,20 @@ class UserController {
 	}
 
 	async getUsers() {
-		const users = await User.findAll();
+		const users = await User.findAll({ include: NFCTags });
 		return users
+	}
+
+	async getUserByUsername(username) {
+		return await User.findOne({
+			where: {
+				"username": username
+			}
+		});
+	}
+
+	async getUserByUsername() {
+		return await User.findAll();
 	}
 
 	async getUserFromUserNameAndPassword(username, password) {
@@ -59,15 +72,15 @@ class UserController {
 		});
 	}
 
+	// { username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=" }
 	async initData() {
+
+
 		const users = User.bulkCreate([
-			{ username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2", passwordHash: "YWRtaW4=" },
+			{ username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2", passwordHash: "YWRtaW4=", NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }] },
 			{ username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=" }
 		]).then((tables) => {
-			tables.forEach((user) => {
-				//user.save()
-			})
-			console.log("Users data have been saved")
+			console.log("Users data have been saved : " + tables.length + " users have been added")
 		});
 	}
 }

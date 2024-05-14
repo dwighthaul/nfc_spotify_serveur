@@ -13,6 +13,9 @@ const cors = require('cors');
 const SQLConnection = require('./controller/SQLConnection');
 const userController = require('./controller/UserController');
 const authentication = require('./controller/Authentication');
+const NFCTags = require('./model/NFCTags');
+const nfcTagsController = require('./controller/NFCTagsController');
+const User = require('./model/User');
 
 
 const app = express();
@@ -64,6 +67,13 @@ app.get('/getUsers', (req, res) => {
 });
 
 
+app.get('/getTags', (req, res) => {
+	nfcTagsController.getTags().then((data) => {
+		res.send(data);
+	});
+});
+
+
 app.post('/login', (req, res) => {
 
 	console.log('LOGIN')
@@ -78,6 +88,16 @@ app.post('/login', (req, res) => {
 			res.send(result.data)
 		}
 	});
+});
+
+
+app.post('/logout', (req, res) => {
+
+	console.log('logout')
+
+	delete req.session.user
+	res.sendStatus(200)
+
 });
 
 

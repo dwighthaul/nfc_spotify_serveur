@@ -1,5 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const UserController = require('./UserController');
+const userController = require('./UserController');
+const nfcTagsController = require('./NFCTagsController');
+const NFCTags = require('../model/NFCTags');
+const User = require('../model/User');
 
 class SQLConnection {
 	sequelize;
@@ -21,12 +24,22 @@ class SQLConnection {
 	}
 
 	syncDatabase() {
-		UserController.initSchema(this)
+		userController.initSchema(this)
+		nfcTagsController.initSchema(this)
+
+		User.hasMany(NFCTags, {
+			foreignKey: {
+				name: "userId"
+			}
+		});
 
 		this.sequelize.sync({ force: true })
 			.then(() => {
 				console.log('Database and tables created successfully');
-				UserController.initData()
+				userController.initData().then(() => {
+					nfcTagsController.initData()
+
+				})
 			})
 			.catch(err => {
 				console.error('Unable to create database and tables', err);
