@@ -3,7 +3,6 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-var port = 3000;
 
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
@@ -13,40 +12,35 @@ const cors = require('cors');
 const SQLConnection = require('./controller/SQLConnection');
 const userController = require('./controller/UserController');
 const authentication = require('./controller/Authentication');
+const nfcTagsController = require('./controller/NFCTagsController');
 
 
+var port = process.env.SERVEUR_PORT;
 const app = express();
 
-// Add headers before the routes are defined
+// TODO : A garder ?
+
 app.use(function (req, res, next) {
-
-	// Website you wish to allow to connect
-	res.setHeader('Access-Control-Allow-Origin', 'https://main.d3gyx44niy20b6.amplifyapp.com');
-	// Request methods you wish to allow
+	res.setHeader('Access-Control-Allow-Origin', `http://${process.env.CLIENT_ENDPOINT}:${process.env.CLIENT_PORT}`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-	// Request headers you wish to allow
 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-	// Set to true if you need the website to include cookies in the requests sent
-	// to the API (e.g. in case you use sessions)
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
-	// Pass to next layer of middleware
 	next();
 });
 
+
 app.use(cors({
-	origin: 'https://client.dwighthaul:3001',
+	origin: `http://${process.env.CLIENT_ENDPOINT}:${process.env.CLIENT_PORT}`,
 	credentials: true
 }))
-/*
+
 let c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
 })
 
-*/
+
 
 
 // Module installé recemment cors, memorystore
@@ -63,17 +57,24 @@ app.use(
 	})
 );
 
-/*
+
 app.get('/getUsers', (req, res) => {
 	userController.getUsers().then((data) => {
 		res.send(data);
 	});
 });
 
-*/
+
+app.get('/getTags', (req, res) => {
+	nfcTagsController.getTags().then((data) => {
+		res.send(data);
+	});
+});
+
+
 app.post('/login', (req, res) => {
 
-	console.log(req.body)
+	console.log('LOGIN')
 
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
@@ -84,8 +85,17 @@ app.post('/login', (req, res) => {
 			req.session.user = result.data
 			res.send(result.data)
 		}
-
 	});
+});
+
+
+app.post('/logout', (req, res) => {
+
+	console.log('logout')
+
+	delete req.session.user
+	res.sendStatus(200)
+
 });
 
 
@@ -123,7 +133,6 @@ app.get('/authCredential', (req, res) => {
 
 
 app.get('/', (req, res) => {
-	console.log("hello world");
 	res.send(req.session);
 })
 

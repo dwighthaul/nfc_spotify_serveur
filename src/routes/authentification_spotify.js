@@ -1,6 +1,9 @@
 const { Router } = require('express');
-const router = Router();
+require('dotenv').config()
 
+
+
+const router = Router();
 const querystring = require('node:querystring');
 const request = require('request');
 
@@ -8,11 +11,11 @@ const request = require('request');
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 // ça commence a me faire regretter d'avoir encapsuler get_credential_spotify dans une fonction..
-var redirect_uri = 'http://dwighthaul.net:3000/authCredential';
+var redirect_uri = `https://${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
 
 
 router.get('/', function (req, res) {
-    console.log("session id debut =", req.session.id);
+    console.log("session id debut TT=", req.session.id, redirect_uri);
     var state = "OzeSpn73t00EsMKwKdfr";
     // aide spotify a savoir les autorisations dont on va avoir besoin
     // TODO : la validation se fait lors d ela requpete donc il faut le faire via la web-interface avant de pouvoir utiliser le tag nfc

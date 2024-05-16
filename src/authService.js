@@ -1,9 +1,7 @@
-const https = require('node:https');
 const request = require('request');
-
-var redirect_uri = 'http://localhost:3001/authCredential';
 const querystring = require('node:querystring');
-const { url } = require('node:inspector');
+
+var redirect_uri = `https://${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 

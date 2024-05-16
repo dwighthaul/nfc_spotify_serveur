@@ -10,8 +10,6 @@ class Authentication {
 		console.log("username", username)
 
 		this.userController.getUserFromUserNameAndPassword(username, password).then((data) => {
-			// verifier le password
-			console.log("data", data?.username)
 
 
 			if (data) {

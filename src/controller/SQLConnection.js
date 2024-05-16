@@ -1,12 +1,15 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const userController = require('./UserController');
+const nfcTagsController = require('./NFCTagsController');
+const NFCTags = require('../model/NFCTags');
 const User = require('../model/User');
-const UserController = require('./UserController');
+require('dotenv').config()
 
 class SQLConnection {
 	sequelize;
 
 	async connect() {
-		this.sequelize = new Sequelize('postgres://postgres:root@localhost:5432/NFT_spotify_DB',
+		this.sequelize = new Sequelize(`postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_ENDPOINT}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB_NAME}`,
 			{
 				logging: false, // Disables logging
 			}
@@ -22,12 +25,22 @@ class SQLConnection {
 	}
 
 	syncDatabase() {
-		UserController.initSchema(this)
+		userController.initSchema(this)
+		nfcTagsController.initSchema(this)
+
+		User.hasMany(NFCTags, {
+			foreignKey: {
+				name: "userId"
+			}
+		});
 
 		this.sequelize.sync({ force: true })
 			.then(() => {
 				console.log('Database and tables created successfully');
-				UserController.initData()
+				userController.initData().then(() => {
+					nfcTagsController.initData()
+
+				})
 			})
 			.catch(err => {
 				console.error('Unable to create database and tables', err);
