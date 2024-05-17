@@ -136,6 +136,11 @@ app.get('/', (req, res) => {
 	res.send(req.session);
 })
 
+app.get('TEST', (req, res) => {
+	const hello = { hello: "joran" }
+	res.send(hello);
+})
+
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)
 })
