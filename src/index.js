@@ -21,7 +21,7 @@ const User = require('./model/User');
 const app = express();
 
 // TODO : A garder ?
-/*
+
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -30,7 +30,7 @@ app.use(function (req, res, next) {
 
 	next();
 });
-*/
+
 
 app.use(cors({
 	origin: 'http://localhost:3001',
@@ -74,12 +74,36 @@ app.get('/getTags', (req, res) => {
 });
 
 
+// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
+// A priori les get ne prenent pas de body donc c'est plus simple si je laisse le serveur gérer
+app.get('/getClientIdAndSecret', (req, res) => {
+	const username = req.session?.user?.username ?? '';
+	userController.getClientIdAndSecret(username).then((data) => {
+		// Pour Paul : j'ai eu un gros soucis avec ça, si je stringify pas ton code du client ne l'accepte pas
+		// Je savais pas si je dois adapter pour que le client fit le serveur ou inversement 
+		// J'ai choisis le serveur vu qu'on utilisait deja ta fct un peu partout sur le côté client 
+		if (data){
+			const response = {
+				"clientId": data.clientId,
+				"clientSecret": data.clientSecret
+			  };
+			res.json(response);
+		} else {
+			res.json({});
+		}
+			 
+	});
+});
+
+
 app.post('/login', (req, res) => {
 
 	console.log('LOGIN')
 
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
+			// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
+			req.session.user.username = req.body.username;
 			res.sendStatus(400).send(result.data)
 			return
 		}
@@ -120,6 +144,19 @@ app.get('/getSession', (req, res) => {
 
 	res.json(user);
 });
+
+
+
+app.post('/updateSettings', (req, res) => {
+		console.log('Update Settings')
+		// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
+		const username = req.session?.user?.username ?? '';
+		userController.updateSettings(req.body.clientId, req.body.clientSecret, username, (result) => {
+		res.sendStatus(200);	
+	});
+});
+
+
 
 app.use('/api/v1/login_spotify', login_spotify.router);
 app.use('/api/v1/launch_song', launch_song);
