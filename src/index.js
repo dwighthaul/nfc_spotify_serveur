@@ -102,9 +102,7 @@ app.post('/login', (req, res) => {
 
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
-			// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
-			req.session.user.username = req.body.username;
-			res.sendStatus(400).send(result.data)
+			res.sendStatus(401).send(result.data)
 			return
 		}
 		if (result.status === "OK") {
