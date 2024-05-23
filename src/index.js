@@ -21,7 +21,7 @@ const app = express();
 // TODO : A garder ?
 
 app.use(function (req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', `http://${process.env.CLIENT_ENDPOINT}:${process.env.CLIENT_PORT}`);
+	res.setHeader('Access-Control-Allow-Origin', `http://${process.env.CLIENT_ENDPOINT}`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 	res.setHeader('Access-Control-Allow-Credentials', true);
@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 
 
 app.use(cors({
-	origin: `http://${process.env.CLIENT_ENDPOINT}:${process.env.CLIENT_PORT}`,
+	origin: `http://${process.env.CLIENT_ENDPOINT}`,
 	credentials: true
 }))
 
