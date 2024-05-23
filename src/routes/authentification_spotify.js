@@ -11,7 +11,7 @@ const request = require('request');
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 // ça commence a me faire regretter d'avoir encapsuler get_credential_spotify dans une fonction..
-var redirect_uri = `${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
+var redirect_uri = `${process.env.SERVEUR_ENDPOINT}/authCredential`;
 
 
 router.get('/', function (req, res) {
@@ -21,6 +21,7 @@ router.get('/', function (req, res) {
     // TODO : la validation se fait lors d ela requpete donc il faut le faire via la web-interface avant de pouvoir utiliser le tag nfc
     var scope = 'user-read-private user-modify-playback-state user-read-playback-state playlist-read-collaborative playlist-read-private';
     req.session.redirect_url = req.query.redirect_url;
+    console.log("Demande d'autorisation a spotify et redirection vers : " + redirect_uri)
 
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
