@@ -1,7 +1,7 @@
 const request = require('request');
 const querystring = require('node:querystring');
 
-var redirect_uri = `https://${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
+var redirect_uri = `${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 

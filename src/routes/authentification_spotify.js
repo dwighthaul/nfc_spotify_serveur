@@ -11,7 +11,7 @@ const request = require('request');
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 // ça commence a me faire regretter d'avoir encapsuler get_credential_spotify dans une fonction..
-var redirect_uri = `https://${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
+var redirect_uri = `${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
 
 
 router.get('/', function (req, res) {
