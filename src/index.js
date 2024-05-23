@@ -59,7 +59,9 @@ app.use(
 
 
 app.get('/getUsers', (req, res) => {
+
 	userController.getUsers().then((data) => {
+		console.log("NBR de users remontes : " + data.length)
 		res.send(data);
 	});
 });
