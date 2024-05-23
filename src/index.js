@@ -136,7 +136,7 @@ app.get('/', (req, res) => {
 	res.send(req.session);
 })
 
-app.get('TEST', (req, res) => {
+app.get('/test', (req, res) => {
 	console.log("TOTO")
 	const hello = { hello: "joran" }
 	res.send(hello);
