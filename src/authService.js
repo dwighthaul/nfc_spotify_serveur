@@ -1,7 +1,7 @@
 const request = require('request');
 const querystring = require('node:querystring');
 
-var redirect_uri = `${process.env.SERVEUR_ENDPOINT}:${process.env.SERVEUR_PORT}/authCredential`;
+var redirect_uri = `${process.env.SERVEUR_ENDPOINT}/authCredential`;
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 
@@ -35,7 +35,7 @@ module.exports = class Auth {
 
 		var state = "OzeSpnW3t00EsMKw";
 		var scope = 'user-read-private user-modify-playback-state user-read-playback-state';
-
+		console.log("Demande d'autorisation a spotify et redirection vers : " + redirect_uri)
 		res.redirect('https://accounts.spotify.com/authorize?' +
 			querystring.stringify({
 				response_type: 'code',
