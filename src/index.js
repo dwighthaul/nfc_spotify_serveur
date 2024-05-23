@@ -59,6 +59,7 @@ app.use(
 
 
 app.get('/getUsers', (req, res) => {
+	console.log("getUsers ?")
 
 	userController.getUsers().then((data) => {
 		console.log("NBR de users remontes : " + data.length)
