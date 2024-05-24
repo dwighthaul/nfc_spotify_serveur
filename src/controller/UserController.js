@@ -41,6 +41,15 @@ class UserController {
 		return users
 	}
 
+	async getClientIdAndSecret(username) {
+		return await User.findOne({
+			attributes: ['clientId', 'clientSecret'],
+			where: {
+				"username": username
+			}
+		})
+	}
+	
 	async getUserByUsername(username) {
 		return await User.findOne({
 			where: {
@@ -72,7 +81,41 @@ class UserController {
 		});
 	}
 
-	// { username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=" }
+	async updateSettings(clientId, clientSecret, username, callback) {
+		console.log("my user name =" + username);
+		return await User.update(
+			{ "clientId" :  clientId,
+			  "clientSecret" : clientSecret
+			},
+			{
+			  where: {
+				"username": username,
+			  },
+			},
+		  ).then(callback);
+	}
+
+
+	async saveSettings(client_id, secret_client) {
+
+		return await User.findOne({
+			attributes: ['username', 'createdAt'],
+			where: {
+				[Op.and]: [
+					this.sqlConnection.sequelize.where(
+						this.sqlConnection.sequelize.fn('lower', this.sqlConnection.sequelize.col('username')),
+						this.sqlConnection.sequelize.fn('lower', username)
+					),
+					this.sqlConnection.sequelize.where(
+						this.sqlConnection.sequelize.fn('lower', this.sqlConnection.sequelize.col('passwordHash')),
+						this.sqlConnection.sequelize.fn('lower', btoa(password))
+					)
+				]
+			}
+		});
+	}
+
+
 	async initData() {
 
 
