@@ -61,7 +61,7 @@ module.exports = class AuthSpotify {
     }
     
     
-    get_credential_spotify(req, callback) {
+    get_credential_spotify(req, res) {
         req.session.loginCode = req.query.code
         req.session.loginStatus = req.query.state
 

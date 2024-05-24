@@ -14,6 +14,9 @@ const userController = require('./controller/UserController');
 const authentication = require('./controller/Authentication');
 const nfcTagsController = require('./controller/NFCTagsController');
 
+const user = require('./routes/user');
+const spotify = require('./routes/spotify');
+
 const AuthSpotify = require('./authSpotify');
 const ProxySpotify = require('./proxySpotify');
 
@@ -26,9 +29,6 @@ const proxySpotify = new ProxySpotify(authSpotify);
 
 
 
-
-
-// TODO : A garder ?
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -42,8 +42,6 @@ let c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
 })
-
-
 
 
 // Module installé recemment cors, memorystore
@@ -61,13 +59,12 @@ app.use(
 );
 
 
+app.use('/spotify/', spotify);
+app.use('/user/', user);
 
-app.get('/test', (req, res) => {
-	authSpotify.clientId = 'b6df1ac233ea4d359790c9a95ccb1ebb';
-	authSpotify.auth(req,res);
-	// TODO : on perd le flow de contrôle avec cette redirection
-    // 		  ça serait bien si on pouvait avoir une callback sur succès
-});
+
+
+
 
 
 app.get('/authCredential', (req, res) => {
@@ -116,9 +113,6 @@ app.get('/getClientIdAndSecret', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-
-	console.log('LOGIN')
-
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
 			res.sendStatus(401).send(result.data)
@@ -133,32 +127,14 @@ app.post('/login', (req, res) => {
 
 
 app.post('/logout', (req, res) => {
-
-	console.log('logout')
-
 	delete req.session.user
 	res.sendStatus(200)
 
 });
 
 
-app.use((req, res, next) => {
-	console.log('=============');
-	console.log(req.session);
-	console.log('=============');
-
-	next();
-});
-
-
-
 app.get('/getSession', (req, res) => {
-	console.log('=============');
-	console.log(req.session);
-	console.log('=============');
-
 	const user = req.session;
-
 	res.json(user);
 });
 
@@ -174,13 +150,6 @@ app.post('/updateSettings', (req, res) => {
 });
 
 
-
-// app.use('/api/v1/login_spotify', login_spotify.router);
-// app.use('/api/v1/launch_song', launch_song);
-// app.use('/api/v1/playlists', playlists);
-// app.use('/api/v1/devices', devices);
-
-
 // Je pourrais modifier le dashboard spotify pour qu'il redirige directement vers api/v1/login_spotify mais pour l'instant
 // pour pas trop perturber j'encapsule ça dans une fonction
 app.get('/authCredential', (req, res) => {
@@ -192,10 +161,10 @@ app.get('/', (req, res) => {
 	res.send(req.session);
 })
 
+
 app.get('/test', (req, res) => {
-	console.log("TOTO")
-	const hello = { hello: "jorane" }
-	res.send(hello);
+	console.log("TOTO") 
+	res.send({ hello: "world" });
 })
 
 

@@ -32,7 +32,6 @@ module.exports = class Auth {
 	};
 
 	getLogin(res) {
-
 		var state = "OzeSpnW3t00EsMKw";
 		var scope = 'user-read-private user-modify-playback-state user-read-playback-state';
 		console.log("Demande d'autorisation a spotify et redirection vers : " + redirect_uri)
@@ -58,6 +57,5 @@ module.exports = class Auth {
 			callback()
 		})
 	}
-
 }
 
