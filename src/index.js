@@ -46,11 +46,12 @@ app.use(bodyParser.json());
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		key: 'session_cookie_user_auth',
-		saveUninitialized: false,
+		resave: false, // Forces the session to be saved back to the session store
+		saveUninitialized: false, // Forces a session that is "uninitialized" to be saved to the store
 		cookie: {
-			secure: true, // Set to true if using HTTPS
 			maxAge: 24 * 60 * 60000,
+			httpOnly: true, // Reduces client-side script control over the cookie
+			secure: true, // Ensures cookies are only sent over HTTPS
 			sameSite: 'none',
 		}
 	})
