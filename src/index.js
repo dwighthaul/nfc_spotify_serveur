@@ -47,7 +47,7 @@ app.use(bodyParser.json());
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		resave: false,
+		resave: true,
 		saveUninitialized: false,
 		cookie: {
 			secure: true,
@@ -61,7 +61,7 @@ app.use(
 
 app.get('/set-cookie', (req, res) => {
 	res.cookie('exampleCookie', 'cookieValue', {
-		httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
+		httpOnly: false,  // Makes the cookie inaccessible to JavaScript on the client side
 		secure: true,    // Ensures the cookie is sent only over HTTPS
 		sameSite: 'None', // Helps prevent CSRF attacks
 		maxAge: 3600000  // 1 hour
