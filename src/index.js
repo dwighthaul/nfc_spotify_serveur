@@ -3,21 +3,21 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const config = require('./config.js');
 
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
 const playlists = require('./routes/playlists');
 const devices = require('./routes/devices');
-const cors = require('cors');
 const SQLConnection = require('./controller/SQLConnection');
 const userController = require('./controller/UserController');
 const authentication = require('./controller/Authentication');
 const nfcTagsController = require('./controller/NFCTagsController');
 
 
-var port = process.env.SERVEUR_PORT;
+const port = process.env.SERVEUR_PORT;
 const app = express();
-
+app.use(express.static('public'))
 
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
@@ -28,16 +28,12 @@ app.use(function (req, res, next) {
 	next();
 });
 
-
-let c = new SQLConnection();
+const c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
 })
 
 
-
-
-// Module installé recemment cors, memorystore
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -51,12 +47,8 @@ app.use(
 	})
 );
 
-
 app.get('/getUsers', (req, res) => {
-	console.log("getUsers ?")
-
 	userController.getUsers().then((data) => {
-		console.log("NBR de users remontes : " + data.length)
 		res.send(data);
 	});
 });
@@ -77,23 +69,21 @@ app.get('/getClientIdAndSecret', (req, res) => {
 		// Pour Paul : j'ai eu un gros soucis avec ça, si je stringify pas ton code du client ne l'accepte pas
 		// Je savais pas si je dois adapter pour que le client fit le serveur ou inversement 
 		// J'ai choisis le serveur vu qu'on utilisait deja ta fct un peu partout sur le côté client 
-		if (data){
+		if (data) {
 			const response = {
 				"clientId": data.clientId,
 				"clientSecret": data.clientSecret
-			  };
+			};
 			res.json(response);
 		} else {
 			res.json({});
 		}
-			 
+
 	});
 });
 
 
 app.post('/login', (req, res) => {
-
-	console.log('LOGIN')
 
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
@@ -141,11 +131,11 @@ app.get('/getSession', (req, res) => {
 
 
 app.post('/updateSettings', (req, res) => {
-		console.log('Update Settings')
-		// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
-		const username = req.session?.user?.username ?? '';
-		userController.updateSettings(req.body.clientId, req.body.clientSecret, username, (result) => {
-		res.sendStatus(200);	
+	console.log('Update Settings')
+	// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
+	const username = req.session?.user?.username ?? '';
+	userController.updateSettings(req.body.clientId, req.body.clientSecret, username, (result) => {
+		res.sendStatus(200);
 	});
 });
 
@@ -162,7 +152,6 @@ app.use('/api/v1/devices', devices);
 app.get('/authCredential', (req, res) => {
 	login_spotify.get_credential_spotify(req, res);
 })
-
 
 app.get('/', (req, res) => {
 	res.send(req.session);
