@@ -101,6 +101,8 @@ app.post('/login', (req, res) => {
 			return
 		}
 		if (result.status === "OK") {
+			res.session.temps = "TETS"
+
 			res.cookie('exampleCookie', 'cookieValue', {
 				httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
 				secure: true,    // Ensures the cookie is sent only over HTTPS
