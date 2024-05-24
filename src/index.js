@@ -135,7 +135,7 @@ app.use((req, res, next) => {
 
 
 
-app.get('/getSession', (req, res) => {
+app.get('/getCookies', (req, res) => {
 	console.log('=============');
 	console.log(req.session);
 	console.log('=============');
