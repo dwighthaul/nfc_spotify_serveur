@@ -8,7 +8,6 @@ const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
 const playlists = require('./routes/playlists');
 const devices = require('./routes/devices');
-const cors = require('cors');
 const SQLConnection = require('./controller/SQLConnection');
 const userController = require('./controller/UserController');
 const authentication = require('./controller/Authentication');
@@ -29,13 +28,7 @@ app.use(function (req, res, next) {
 	next();
 });
 
-/*
-app.use(cors({
-	origin: `http://${process.env.CLIENT_ENDPOINT}`,
-	credentials: true
-}))
-*/
-let c = new SQLConnection();
+const c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
 })
@@ -57,12 +50,14 @@ app.use(
 	})
 );
 
+// TODO : Deplacer vers un fichier ?
+app.get('/robots.txt', function (req, res) {
+	res.type('text/plain');
+	res.send("User-agent: *\nDisallow: /");
+});
 
 app.get('/getUsers', (req, res) => {
-	console.log("getUsers ?")
-
 	userController.getUsers().then((data) => {
-		console.log("NBR de users remontes : " + data.length)
 		res.send(data);
 	});
 });
@@ -76,8 +71,6 @@ app.get('/getTags', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-
-	console.log('LOGIN')
 
 	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
 		if (result.status === "KO") {
@@ -134,16 +127,16 @@ app.get('/authCredential', (req, res) => {
 	login_spotify.get_credential_spotify(req, res);
 })
 
-
 app.get('/', (req, res) => {
 	res.send(req.session);
 })
 
 app.get('/test', (req, res) => {
-	console.log("TOTO")
 	const hello = { hello: "joran" }
 	res.send(hello);
 })
+
+
 
 app.listen(port, '0.0.0.0', () => {
 	console.log(`Example app listening on port ${port}`)
