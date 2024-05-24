@@ -136,9 +136,9 @@ app.use((req, res, next) => {
 
 
 app.get('/getCookies', (req, res) => {
-	console.log('=============');
+	console.log('============= - getCookies');
 	console.log(req.session);
-	console.log('=============');
+	console.log('============= - getCookies');
 
 	const user = req.session;
 
