@@ -110,6 +110,9 @@ app.post('/login', (req, res) => {
 			});
 
 			req.session.user = result.data
+
+			console.log(req.session)
+
 			res.send(result.data)
 		}
 	});
