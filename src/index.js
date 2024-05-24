@@ -178,3 +178,74 @@ app.get('/test', (req, res) => {
 app.listen(port, '0.0.0.0', () => {
 	console.log(`Example app listening on port ${port}`)
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const express = require('express');
+// const app = express();
+// const request = require('request');
+
+
+
+// // Define your routes after the middleware
+// app.get('/test', (req, res) => {
+//     const options = {
+//         url: "https://api.spotify.com/v1/me/player/play?device_id=" + 1,
+//         body: {
+//         },
+//         headers: {
+//             "Authorization": "Bearer ",
+//         },
+//         json: true
+//     };
+
+// 	// Effectue une requête PUT à l'API Spotify pour démarrer la lecture.
+// 	request.put(options, (error, response, body) => {
+		
+// 	});
+
+// });
+
+// // Non ça va pas... je suis obligé de donner requestToResend
+// // Comment avoir une gestion generique ?? 
+// function handleResponse_Spotify(res, statusCode, data, error, requestToResend) {
+//     if (error) {
+//         res.status(statusCode).json({ success: false, message: error.message || 'An error occurred', error });
+//     } else {
+// 		if (statusCode === 401) {
+// 			handleRefresh
+// 		}
+//         res.status(statusCode).json({ success: true, data });
+//     }
+// }
+
+
+// // Start the server
+// app.listen(3000, () => {
+//   console.log('Server is running on port 3000');
+// });
+
+
+
+
+
+
+
+

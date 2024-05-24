@@ -3,6 +3,9 @@ const router = Router();
 
 const request = require('request');
 
+
+
+
 // Gestionnaire de route pour lancer la lecture d'une playlist Spotify sur un appareil spécifique.
 router.get('/', function (req, res) {
 
