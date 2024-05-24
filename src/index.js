@@ -35,22 +35,6 @@ app.use(cors({
 
 const cookieParser = require('cookie-parser');
 
-app.get('/set-cookie', (req, res) => {
-	res.cookie('exampleCookie', 'cookieValue', {
-		httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
-		secure: true,    // Ensures the cookie is sent only over HTTPS
-		sameSite: 'None', // Helps prevent CSRF attacks
-		maxAge: 3600000  // 1 hour
-	});
-	res.send('Cookie is set');
-});
-
-// Read a cookie
-app.get('/get-cookie', (req, res) => {
-	let cookie = req.cookies['exampleCookie'];
-	res.send(`Cookie Value: ${cookie}`);
-});
-
 const c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
@@ -73,6 +57,24 @@ app.use(
 
 	})
 );
+
+
+app.get('/set-cookie', (req, res) => {
+	res.cookie('exampleCookie', 'cookieValue', {
+		httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
+		secure: true,    // Ensures the cookie is sent only over HTTPS
+		sameSite: 'None', // Helps prevent CSRF attacks
+		maxAge: 3600000  // 1 hour
+	});
+	res.send('Cookie is set');
+});
+
+// Read a cookie
+app.get('/get-cookie', (req, res) => {
+	let cookie = req.cookies['exampleCookie'];
+	res.send(`Cookie Value: ${cookie}`);
+});
+
 
 
 app.get('/getUsers', (req, res) => {
