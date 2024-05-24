@@ -51,6 +51,7 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: true,
+			partitioned: true,
 			maxAge: 24 * 60 * 60000
 		}, // value of maxAge is defined in milliseconds. 
 
@@ -104,6 +105,7 @@ app.post('/login', (req, res) => {
 		if (result.status === "OK") {
 
 			res.cookie('toto', 'valueICI', {
+				partitioned: true,
 				httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
 				secure: true,    // Ensures the cookie is sent only over HTTPS
 				sameSite: 'None', // Helps prevent CSRF attacks
