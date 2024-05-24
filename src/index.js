@@ -46,12 +46,12 @@ app.use(bodyParser.json());
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		resave: false,
 		key: 'session_cookie_user_auth',
 		saveUninitialized: false,
 		cookie: {
 			secure: true, // Set to true if using HTTPS
 			maxAge: 24 * 60 * 60000,
+			sameSite: 'none',
 		}
 	})
 );
