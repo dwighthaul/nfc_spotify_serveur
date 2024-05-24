@@ -44,7 +44,8 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: false, // Set to true if using HTTPS
-			maxAge: 24 * 60 * 60000
+			maxAge: 24 * 60 * 60000,
+			sameSite: 'None'
 		}, // value of maxAge is defined in milliseconds. 
 
 	})
