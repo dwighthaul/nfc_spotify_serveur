@@ -47,6 +47,7 @@ app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
+		key: 'toto',
 		saveUninitialized: false,
 		cookie: {
 			secure: true,
@@ -102,7 +103,7 @@ app.post('/login', (req, res) => {
 		}
 		if (result.status === "OK") {
 
-			res.cookie('exampleCookie', 'cookieValue', {
+			res.cookie('toto', 'valueICI', {
 				httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
 				secure: true,    // Ensures the cookie is sent only over HTTPS
 				sameSite: 'None', // Helps prevent CSRF attacks
