@@ -50,7 +50,7 @@ app.use(
 		key: 'session_cookie_user_auth',
 		saveUninitialized: false,
 		cookie: {
-			secure: false, // Set to true if using HTTPS
+			secure: true, // Set to true if using HTTPS
 			maxAge: 24 * 60 * 60000,
 			SameSite: 'none',
 		}, // value of maxAge is defined in milliseconds. 
