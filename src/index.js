@@ -52,9 +52,8 @@ app.use(
 		cookie: {
 			secure: true, // Set to true if using HTTPS
 			maxAge: 24 * 60 * 60000,
-			SameSite: 'none',
-		}, // value of maxAge is defined in milliseconds. 
-
+			sameSite: 'none',
+		}
 	})
 );
 
