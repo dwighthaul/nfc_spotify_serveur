@@ -46,16 +46,13 @@ app.use(bodyParser.json());
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		resave: false, // Forces the session to be saved back to the session store
-		saveUninitialized: false, // Forces a session that is "uninitialized" to be saved to the store
-		cookie: {
-			maxAge: 24 * 60 * 60000,
-			httpOnly: true, // Reduces client-side script control over the cookie
-			secure: true, // Ensures cookies are only sent over HTTPS
-			sameSite: 'none',
-		}
+		resave: false,
+		saveUninitialized: false,
+		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
+
 	})
 );
+
 
 app.get('/getUsers', (req, res) => {
 	userController.getUsers().then((data) => {
