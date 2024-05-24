@@ -48,7 +48,11 @@ app.use(
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
 		saveUninitialized: false,
-		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
+		cookie: {
+			secure: true,
+			sameSite: "None",
+			maxAge: 24 * 60 * 60000
+		}, // value of maxAge is defined in milliseconds. 
 
 	})
 );
