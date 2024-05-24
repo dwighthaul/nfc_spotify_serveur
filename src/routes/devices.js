@@ -10,7 +10,7 @@ router.get('/', function (req, res) {
 		headers: {
 			'Authorization': "Bearer " + req.session.accessTokenBearer,
 		},
-		json: true  // si on ne met pas ce champ il faut parser le body avec JSON.parse(body)     
+		json: true  
 	};
 	request.get(options, (error, response, body) => {
 		console.log(response.statusCode)

@@ -14,17 +14,26 @@ const userController = require('./controller/UserController');
 const authentication = require('./controller/Authentication');
 const nfcTagsController = require('./controller/NFCTagsController');
 
+const AuthSpotify = require('./authSpotify');
+const ProxySpotify = require('./proxySpotify');
 
 var port = process.env.SERVEUR_PORT;
 const app = express();
 
 
+const authSpotify = new AuthSpotify();
+const proxySpotify = new ProxySpotify(authSpotify);
+
+
+
+
+
+// TODO : A garder ?
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 	res.setHeader('Access-Control-Allow-Credentials', true);
-
 	next();
 });
 
@@ -50,6 +59,21 @@ app.use(
 
 	})
 );
+
+
+
+app.get('/test', (req, res) => {
+	authSpotify.clientId = 'b6df1ac233ea4d359790c9a95ccb1ebb';
+	authSpotify.auth(req,res);
+	// TODO : on perd le flow de contrôle avec cette redirection
+    // 		  ça serait bien si on pouvait avoir une callback sur succès
+});
+
+
+app.get('/authCredential', (req, res) => {
+	authSpotify.get_credential_spotify(req, res);
+})
+
 
 
 app.get('/getUsers', (req, res) => {
@@ -151,10 +175,10 @@ app.post('/updateSettings', (req, res) => {
 
 
 
-app.use('/api/v1/login_spotify', login_spotify.router);
-app.use('/api/v1/launch_song', launch_song);
-app.use('/api/v1/playlists', playlists);
-app.use('/api/v1/devices', devices);
+// app.use('/api/v1/login_spotify', login_spotify.router);
+// app.use('/api/v1/launch_song', launch_song);
+// app.use('/api/v1/playlists', playlists);
+// app.use('/api/v1/devices', devices);
 
 
 // Je pourrais modifier le dashboard spotify pour qu'il redirige directement vers api/v1/login_spotify mais pour l'instant
@@ -178,74 +202,3 @@ app.get('/test', (req, res) => {
 app.listen(port, '0.0.0.0', () => {
 	console.log(`Example app listening on port ${port}`)
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const app = express();
-// const request = require('request');
-
-
-
-// // Define your routes after the middleware
-// app.get('/test', (req, res) => {
-//     const options = {
-//         url: "https://api.spotify.com/v1/me/player/play?device_id=" + 1,
-//         body: {
-//         },
-//         headers: {
-//             "Authorization": "Bearer ",
-//         },
-//         json: true
-//     };
-
-// 	// Effectue une requête PUT à l'API Spotify pour démarrer la lecture.
-// 	request.put(options, (error, response, body) => {
-		
-// 	});
-
-// });
-
-// // Non ça va pas... je suis obligé de donner requestToResend
-// // Comment avoir une gestion generique ?? 
-// function handleResponse_Spotify(res, statusCode, data, error, requestToResend) {
-//     if (error) {
-//         res.status(statusCode).json({ success: false, message: error.message || 'An error occurred', error });
-//     } else {
-// 		if (statusCode === 401) {
-// 			handleRefresh
-// 		}
-//         res.status(statusCode).json({ success: true, data });
-//     }
-// }
-
-
-// // Start the server
-// app.listen(3000, () => {
-//   console.log('Server is running on port 3000');
-// });
-
-
-
-
-
-
-
-

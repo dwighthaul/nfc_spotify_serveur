@@ -1,0 +1,12 @@
+Dans une url si on ne met pas json: true 
+ALORS il faut parser le body avec JSON.parse(body)     
+	
+    
+Tout la partie controller ça sera du code defensif car on a pas le controlle sur ce qui arrive
+
+
+Je vois pas la diff entre une erreur et un statusCode qui n'est pas celui attendu (genre 400)
+
+
+J'ai l'impression que le await est non-bloquant 
+TODO : Mais voir comment ça se passe si j'ai plusieurs requete en meme temps (concurrence de ressource)
