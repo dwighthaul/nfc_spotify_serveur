@@ -28,6 +28,11 @@ app.use(function (req, res, next) {
 	next();
 });
 
+app.use(cors({
+	origin: `${process.env.CLIENT_ENDPOINT}`,
+	credentials: true
+}));
+
 const c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
