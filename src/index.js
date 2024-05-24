@@ -43,7 +43,6 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
-			httpOnly: false,
 			secure: false, // Set to true if using HTTPS
 			maxAge: 24 * 60 * 60000,
 			SameSite: 'None'
