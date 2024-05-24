@@ -4,8 +4,9 @@
 	"description": "",
 	"main": "./src/index.js",
 	"scripts": {
-		"start": "nodemon ./src/index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"start": "set NODE_ENV=local && nodemon ./src/index.js",
+		"dev": "set NODE_ENV=local && npm start",
+		"prod": "set NODE_ENV=production && npm start"
 	},
 	"author": "",
 	"license": "ISC",

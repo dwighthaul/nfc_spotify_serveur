@@ -3,6 +3,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const config = require('./config.js');
 
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
@@ -14,10 +15,9 @@ const authentication = require('./controller/Authentication');
 const nfcTagsController = require('./controller/NFCTagsController');
 
 
-var port = process.env.SERVEUR_PORT;
+const port = process.env.SERVEUR_PORT;
 const app = express();
-
-// TODO : A garder ?
+app.use(express.static('public'))
 
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
@@ -34,9 +34,6 @@ c.connect().then(() => {
 })
 
 
-
-
-// Module installé recemment cors, memorystore
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -49,12 +46,6 @@ app.use(
 
 	})
 );
-
-// TODO : Deplacer vers un fichier ?
-app.get('/robots.txt', function (req, res) {
-	res.type('text/plain');
-	res.send("User-agent: *\nDisallow: /");
-});
 
 app.get('/getUsers', (req, res) => {
 	userController.getUsers().then((data) => {
