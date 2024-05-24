@@ -34,6 +34,9 @@ app.use(cors({
 	credentials: true
 }));
 
+app.set('trust proxy', 1);
+
+
 const c = new SQLConnection();
 c.connect().then(() => {
 	c.syncDatabase()
@@ -47,7 +50,6 @@ app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
-		key: 'toto',
 		saveUninitialized: false,
 		cookie: {
 			secure: true,
@@ -103,15 +105,15 @@ app.post('/login', (req, res) => {
 			return
 		}
 		if (result.status === "OK") {
-
-			res.cookie('toto', 'valueICI', {
-				partitioned: true,
-				httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
-				secure: true,    // Ensures the cookie is sent only over HTTPS
-				sameSite: 'None', // Helps prevent CSRF attacks
-				maxAge: 3600000  // 1 hour
-			});
-
+			/*
+						res.cookie('toto', 'valueICI', {
+							partitioned: true,
+							httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
+							secure: true,    // Ensures the cookie is sent only over HTTPS
+							sameSite: 'None', // Helps prevent CSRF attacks
+							maxAge: 3600000  // 1 hour
+						});
+			*/
 			req.session.user = result.data
 
 			console.log(req.session)
