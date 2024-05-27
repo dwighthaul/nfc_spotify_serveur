@@ -41,10 +41,13 @@ app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
+		httpOnly: false,
 		saveUninitialized: false,
-		sameSite: 'None', // Required for cross-site cookies
 		cookie: {
-			maxAge: 24 * 60 * 60000
+			secure: true,
+			maxAge: 24 * 60 * 60000,
+			domain: '.serveur.dwighthaul.net',
+			sameSite: 'None', // Required for cross-site cookies
 		}, // value of maxAge is defined in milliseconds. 
 
 	})
@@ -133,6 +136,14 @@ app.get('/get-cookie', (req, res) => {
 });
 
 app.get('/set-cookie', (req, res) => {
+
+	res.cookie('testCookie', 'testValue', {
+		httpOnly: false,
+		secure: true,
+		sameSite: 'None',
+		domain: 'serveur.dwighthaul.net',
+	});
+
 	req.session.test = "IIIII"
 	console.log('=============');
 	console.log();
@@ -142,6 +153,7 @@ app.get('/set-cookie', (req, res) => {
 
 	res.json(user);
 });
+
 
 
 app.post('/updateSettings', (req, res) => {
