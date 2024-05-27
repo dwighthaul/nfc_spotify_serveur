@@ -40,7 +40,7 @@ app.use(cookieSession({
 	keys: ['your-secret-key'],
 	maxAge: 24 * 60 * 60 * 1000,
 	secure: true, // Assurez-vous que le cookie est seulement envoyé via HTTPS
-	httpOnly: true // Assurez-vous que le cookie n'est pas accessible via JavaScript côté client
+	httpOnly: false // Assurez-vous que le cookie n'est pas accessible via JavaScript côté client
 
 })
 );
