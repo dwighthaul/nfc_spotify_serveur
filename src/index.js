@@ -92,7 +92,9 @@ app.post('/login', (req, res) => {
 		}
 		if (result.status === "OK") {
 			req.session.user = result.data
-			res.send(result.data)
+			req.session.save(() => {
+				res.send(result.data)
+			})
 		}
 	});
 });
