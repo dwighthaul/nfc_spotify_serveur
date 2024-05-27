@@ -132,7 +132,7 @@ app.get('/get-cookie', (req, res) => {
 });
 
 app.get('/set-cookie', (req, res) => {
-	req.session, test = "IIIII"
+	req.session.test = "IIIII"
 	console.log('=============');
 	console.log();
 	console.log('=============');
