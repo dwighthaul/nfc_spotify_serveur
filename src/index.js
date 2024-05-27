@@ -42,6 +42,7 @@ app.use(
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
 		saveUninitialized: false,
+		sameSite: 'None', // Required for cross-site cookies
 		cookie: {
 			maxAge: 24 * 60 * 60000
 		}, // value of maxAge is defined in milliseconds. 
