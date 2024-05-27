@@ -1,7 +1,5 @@
-
-
 const express = require('express');
-const session = require('express-session');
+var cookieSession = require('cookie-session')
 const bodyParser = require('body-parser');
 const config = require('./config.js');
 
@@ -37,14 +35,14 @@ c.connect().then(() => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(
-	session({
-		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		resave: false,
-		saveUninitialized: false,
-		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
+app.use(cookieSession({
+	name: "NIIIIIIIQUELESCOOKIES",
+	keys: ['your-secret-key'],
+	maxAge: 24 * 60 * 60 * 1000,
+	secure: true, // Assurez-vous que le cookie est seulement envoyé via HTTPS
+	httpOnly: true // Assurez-vous que le cookie n'est pas accessible via JavaScript côté client
 
-	})
+})
 );
 
 app.get('/getUsers', (req, res) => {
