@@ -4,7 +4,6 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const config = require('./config.js');
-const cors = require('cors');
 
 const login_spotify = require('./routes/authentification_spotify');
 const launch_song = require('./routes/launch_song');
@@ -18,6 +17,7 @@ const nfcTagsController = require('./controller/NFCTagsController');
 
 const port = process.env.SERVEUR_PORT;
 const app = express();
+app.use(express.static('public'))
 
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
@@ -27,13 +27,6 @@ app.use(function (req, res, next) {
 
 	next();
 });
-
-app.use(cors({
-	origin: `${process.env.CLIENT_ENDPOINT}`,
-	credentials: true
-}));
-
-const cookieParser = require('cookie-parser');
 
 const c = new SQLConnection();
 c.connect().then(() => {
@@ -47,35 +40,12 @@ app.use(bodyParser.json());
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		resave: true,
+		resave: false,
 		saveUninitialized: false,
-		cookie: {
-			secure: true,
-			partitioned: true,
-			maxAge: 24 * 60 * 60000
-		}, // value of maxAge is defined in milliseconds. 
+		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
 
 	})
 );
-
-
-app.get('/set-cookie', (req, res) => {
-	res.cookie('exampleCookie', 'cookieValue', {
-		httpOnly: false,  // Makes the cookie inaccessible to JavaScript on the client side
-		secure: true,    // Ensures the cookie is sent only over HTTPS
-		sameSite: 'None', // Helps prevent CSRF attacks
-		maxAge: 3600000  // 1 hour
-	});
-	res.send('Cookie is set');
-});
-
-// Read a cookie
-app.get('/get-cookie', (req, res) => {
-	let cookie = req.cookies['exampleCookie'];
-	res.send(`Cookie Value: ${cookie}`);
-});
-
-
 
 app.get('/getUsers', (req, res) => {
 	userController.getUsers().then((data) => {
@@ -121,19 +91,7 @@ app.post('/login', (req, res) => {
 			return
 		}
 		if (result.status === "OK") {
-
-			res.cookie('toto', 'valueICI', {
-				partitioned: true,
-				httpOnly: true,  // Makes the cookie inaccessible to JavaScript on the client side
-				secure: true,    // Ensures the cookie is sent only over HTTPS
-				sameSite: 'None', // Helps prevent CSRF attacks
-				maxAge: 3600000  // 1 hour
-			});
-
 			req.session.user = result.data
-
-			console.log(req.session)
-
 			res.send(result.data)
 		}
 	});
@@ -160,10 +118,10 @@ app.use((req, res, next) => {
 
 
 
-app.get('/getCookies', (req, res) => {
-	console.log('============= - getCookies');
+app.get('/getSession', (req, res) => {
+	console.log('=============');
 	console.log(req.session);
-	console.log('============= - getCookies');
+	console.log('=============');
 
 	const user = req.session;
 
@@ -206,6 +164,6 @@ app.get('/test', (req, res) => {
 })
 
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
 	console.log(`Example app listening on port ${port}`)
 })
