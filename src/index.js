@@ -42,7 +42,9 @@ app.use(
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 		resave: false,
 		saveUninitialized: false,
-		cookie: { maxAge: 24 * 60 * 60000 }, // value of maxAge is defined in milliseconds. 
+		cookie: {
+			maxAge: 24 * 60 * 60000
+		}, // value of maxAge is defined in milliseconds. 
 
 	})
 );
@@ -92,6 +94,7 @@ app.post('/login', (req, res) => {
 		}
 		if (result.status === "OK") {
 			req.session.user = result.data
+
 			res.send(result.data)
 		}
 	});
@@ -118,7 +121,7 @@ app.use((req, res, next) => {
 
 
 
-app.get('/getSession', (req, res) => {
+app.get('/get-cookie', (req, res) => {
 	console.log('=============');
 	console.log(req.session);
 	console.log('=============');
@@ -128,6 +131,16 @@ app.get('/getSession', (req, res) => {
 	res.json(user);
 });
 
+app.get('/set-cookie', (req, res) => {
+	req.session, test = "IIIII"
+	console.log('=============');
+	console.log();
+	console.log('=============');
+
+	const user = req.session;
+
+	res.json(user);
+});
 
 
 app.post('/updateSettings', (req, res) => {
