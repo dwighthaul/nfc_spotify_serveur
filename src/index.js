@@ -31,7 +31,7 @@ app.get('/set-cookie', (req, res) => {
 		domain: 'serveur.dwighthaul.net', // replace with your backend domain
 	});
 
-	res.session.data = "TTTTT"
+	req.session.data = "TTTTT"
 
 	res.send('Cookie set');
 });
