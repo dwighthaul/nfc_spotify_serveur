@@ -44,6 +44,7 @@ app.use(
 		httpOnly: false,
 		saveUninitialized: false,
 		cookie: {
+			httpOnly: false,
 			secure: true,
 			maxAge: 24 * 60 * 60000,
 			domain: '.serveur.dwighthaul.net',
