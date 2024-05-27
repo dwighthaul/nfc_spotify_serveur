@@ -14,7 +14,7 @@ app.get('/set-cookie', (req, res) => {
 		httpOnly: true,
 		secure: true,
 		sameSite: 'None',
-		domain: 'https://serveur.dwighthaul.net', // replace with your backend domain
+		domain: 'serveur.dwighthaul.net', // replace with your backend domain
 	});
 	res.send('Cookie set');
 });
