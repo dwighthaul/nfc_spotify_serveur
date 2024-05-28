@@ -1,0 +1,32 @@
+services:
+  spotify_NFC:
+    image: dwighthaul/nfc_spotify_serveur:latest
+    ports:
+      - "80:3000"
+    restart: always
+    environment:
+      SERVEUR_PORT: 3000
+      SERVEUR_ENDPOINT: https://serveur.dwighthaul.net
+      CLIENT_PORT: 3001
+      CLIENT_ENDPOINT: https://dwighthaul.com
+      POSTGRES_USER: paul
+      POSTGRES_PASSWORD: example
+      POSTGRES_ENDPOINT: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB_NAME: nfc_spotify_db
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: paul
+      POSTGRES_DB: nfc_spotify_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

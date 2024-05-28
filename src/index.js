@@ -42,8 +42,8 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			httpOnly: false,
-			sameSite: "none",
-			secure: true,
+			secure: (process.env.NODE_ENV === "production"),
+			sameSite: (process.env.NODE_ENV === "production") ? "none" : "lax",
 			maxAge: 24 * 60 * 60000
 		}, // value of maxAge is defined in milliseconds. 
 
