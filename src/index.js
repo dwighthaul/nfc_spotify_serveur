@@ -35,6 +35,9 @@ c.connect().then(() => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.set("trust proxy", 1);
+
+
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
