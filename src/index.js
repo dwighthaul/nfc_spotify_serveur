@@ -14,6 +14,9 @@ const nfcTagsController = require('./controller/NFCTagsController');
 
 
 const port = process.env.SERVEUR_PORT;
+
+console.log(process.env)
+
 const app = express();
 app.use(express.static('public'))
 
