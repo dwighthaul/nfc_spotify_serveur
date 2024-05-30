@@ -64,7 +64,6 @@ app.get('/set-cookie', (req, res) => {
 app.get('/get-all-sessions', (req, res) => {
 	req.sessionStore.all((err, sessions) => {
 		res.json(sessions);
-
 	})
 });
 
