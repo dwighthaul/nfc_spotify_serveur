@@ -40,20 +40,27 @@ app.use(bodyParser.json());
 
 app.set("trust proxy", 1);
 
-console.log("NTMMMMMMMMMMMMMMMMMMMMMMMM = process.env.NODE_ENV" + process.env.NODE_ENV)
-app.use(
-	session({
-		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
-		resave: false,
-		saveUninitialized: false,
-		cookie: {
-			httpOnly: false,
-			secure: (process.env.NODE_ENV === "production"),
-			sameSite: (process.env.NODE_ENV === "production") ? "none" : "lax",
-			maxAge: 24 * 60 * 60000
-		}, // value of maxAge is defined in milliseconds. 
 
-	})
+let sessionConfig = {
+	secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		httpOnly: false,
+		secure: (process.env.NODE_ENV === "production"),
+		sameSite: (process.env.NODE_ENV === "production") ? "none" : "lax",
+		maxAge: 24 * 60 * 60000
+	}, // value of maxAge is defined in milliseconds. 
+
+}
+console.log("sessionConfig")
+console.log()
+console.log(sessionConfig)
+console.log()
+console.log("sessionConfig")
+
+app.use(
+	session(sessionConfig)
 );
 
 app.get('/getUsers', (req, res) => {
