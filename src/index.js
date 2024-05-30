@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 
 app.set("trust proxy", 1);
 
-console.log("process.env.NODE_ENV")
+console.log("NTMMMMMMMMMMMMMMMMMMMMMMMM = process.env.NODE_ENV" + process.env.NODE_ENV)
 app.use(
 	session({
 		secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
