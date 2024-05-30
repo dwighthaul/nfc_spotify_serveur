@@ -147,6 +147,13 @@ app.get('/set-cookie', (req, res) => {
 	res.json(user);
 });
 
+app.get('/get-all-sessions', (req, res) => {
+	req.sessionStore.all((err, sessions) => {
+		res.json(sessions);
+
+	})
+});
+
 
 
 app.post('/updateSettings', (req, res) => {
