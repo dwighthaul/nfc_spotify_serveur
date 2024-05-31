@@ -17,16 +17,14 @@ app.use(function (req, res, next) {
 });
 
 // Session configuration
-app.use(session({
+app.use(cookieSession({
 	secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 	resave: false,
 	saveUninitialized: true,
-	cookie: {
-		httpOnly: false, // Helps mitigate XSS attacks by restricting access to the cookie
-		secure: true,  // Ensures the cookie is only sent over HTTPS
-		sameSite: 'none', // Required for cross-site cookies
-		maxAge: 86400000 // 1 day
-	}
+	httpOnly: false, // Helps mitigate XSS attacks by restricting access to the cookie
+	secure: true,  // Ensures the cookie is only sent over HTTPS
+	sameSite: 'none', // Required for cross-site cookies
+	maxAge: 86400000 // 1 day
 }));
 
 app.get('/', (req, res) => {
