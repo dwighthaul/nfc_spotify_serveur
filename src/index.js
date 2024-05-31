@@ -34,7 +34,7 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: {
 		httpOnly: false, // Helps mitigate XSS attacks by restricting access to the cookie
-		secure: true,  // Ensures the cookie is only sent over HTTPS
+		secure: false,  // Ensures the cookie is only sent over HTTPS
 		sameSite: 'None', // Required for cross-site cookies
 		maxAge: 86400000 // 1 day
 	}
