@@ -6,7 +6,7 @@ const app = express();
 // Trust the first proxy (needed for secure cookies behind a reverse proxy)
 app.set('trust proxy', 1);
 
-/*
+
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `https://dwighthaul.com`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -14,16 +14,8 @@ app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
 	next();
-});*/
+});
 
-app.use(cors(
-	{
-		credentials: true,
-		origin: `https://dwighthaul.com`,
-		allowedHeaders: 'Accept, Accept-Language, Content-Language, Content-Type,Set-Cookie',
-
-	}
-))
 
 // Session configuration
 app.use(session({
