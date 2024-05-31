@@ -20,7 +20,8 @@ app.use(cors(
 	{
 		credentials: true,
 		origin: `https://dwighthaul.com`,
-		allowedHeaders: '*'
+		allowedHeaders: 'Accept, Accept-Language, Content-Language, Content-Type,Set-Cookie',
+
 	}
 ))
 
