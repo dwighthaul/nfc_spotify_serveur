@@ -20,7 +20,7 @@ app.use(function (req, res, next) {
 app.use(session({
 	secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
 	resave: false,
-	saveUninitialized: false,
+	saveUninitialized: true,
 	cookie: {
 		httpOnly: false, // Helps mitigate XSS attacks by restricting access to the cookie
 		secure: true,  // Ensures the cookie is only sent over HTTPS
