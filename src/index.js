@@ -16,6 +16,8 @@ app.use(function (req, res, next) {
 	next();
 });
 
+app.use(cors())
+
 // Session configuration
 app.use(session({
 	secret: 'APODAJDSDAJDLFHELSJCPJZXPR',
