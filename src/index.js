@@ -11,7 +11,7 @@ const corsOptions = {
 	origin: 'https://dwighthaul.com',
 	credentials: true,
 	methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-	allowedHeaders: 'X-Requested-With,content-type'
+	allowedHeaders: 'X-Requested-With,content-type,Access-Control-Allow-Credentials,Set-Cookie'
 };
 
 app.use(cors(corsOptions));
