@@ -16,8 +16,11 @@ app.use(function (req, res, next) {
 */
 const corsOptions = {
 	origin: 'https://dwighthaul.com',
-	credentials: true, // Allow credentials (cookies, authorization headers, TLS client certificates)
+	credentials: true,
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods if necessary
+	allowedHeaders: 'Content-Type,Authorization' // Specify allowed headers if necessary
 };
+
 app.use(cors(corsOptions));
 
 // Trust the first proxy (needed for secure cookies behind a reverse proxy)
