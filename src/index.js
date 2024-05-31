@@ -19,7 +19,8 @@ app.use(function (req, res, next) {
 app.use(cors(
 	{
 		credentials: true,
-		origin: `https://dwighthaul.com`
+		origin: `https://dwighthaul.com`,
+		allowedHeaders: '*'
 	}
 ))
 
