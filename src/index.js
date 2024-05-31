@@ -18,7 +18,7 @@ const corsOptions = {
 	origin: 'https://dwighthaul.com',
 	credentials: true,
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods if necessary
-	allowedHeaders: 'Content-Type,Authorization' // Specify allowed headers if necessary
+	allowedHeaders: 'Content-Type,Authorization,Set-Cookie' // Specify allowed headers if necessary
 };
 
 app.use(cors(corsOptions));
@@ -35,10 +35,11 @@ app.use(session({
 	cookie: {
 		httpOnly: false, // Helps mitigate XSS attacks by restricting access to the cookie
 		secure: true,  // Ensures the cookie is only sent over HTTPS
-		sameSite: 'none', // Required for cross-site cookies
+		sameSite: 'None', // Required for cross-site cookies
 		maxAge: 86400000 // 1 day
 	}
 }));
+
 
 app.get('/', (req, res) => {
 	res.send('Home Page');
