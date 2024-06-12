@@ -127,7 +127,6 @@ app.use((req, res, next) => {
 
 
 
-
 app.post('/updateSettings', (req, res) => {
 	console.log('Update Settings')
 	// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
