@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "nodemon ./src/index.js",
 		"dev": "set NODE_ENV=local && npm start",
-		"prod": "set NODE_ENV=production && npm start"
+		"prod": "export NODE_ENV=production && npm start"
 	},
 	"author": "",
 	"license": "ISC",
