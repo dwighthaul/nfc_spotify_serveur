@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "./src/index.js",
 	"scripts": {
-		"start": "nodemon ./src/index.js",
+		"start": "set NODE_ENV=local && nodemon ./src/index.js",
 		"dev": "set NODE_ENV=local && npm start",
 		"prod": "set NODE_ENV=production && npm start"
 	},

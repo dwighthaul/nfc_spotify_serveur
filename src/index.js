@@ -38,8 +38,8 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: {
 		httpOnly: false, // Helps mitigate XSS attacks by restricting access to the cookie
-		secure: true,  // Ensures the cookie is only sent over HTTPS
-		sameSite: 'None', // Required for cross-site cookies
+		secure: (process.env.NODE_ENV === "production"),  // Ensures the cookie is only sent over HTTPS
+		sameSite: (process.env.NODE_ENV === "production") ? 'None' : 'Strict', // Required for cross-site cookies
 		maxAge: 86400000 // 1 day
 	}
 }));
