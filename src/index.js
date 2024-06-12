@@ -1,34 +1,35 @@
+
+
 const express = require('express');
 const session = require('express-session');
-const cors = require('cors');
+const bodyParser = require('body-parser');
+const config = require('./config.js');
+
+const login_spotify = require('./routes/authentification_spotify');
+const launch_song = require('./routes/launch_song');
+const playlists = require('./routes/playlists');
+const devices = require('./routes/devices');
+const cookie = require('./routes/cookie');
+const SQLConnection = require('./controller/SQLConnection');
+const userController = require('./controller/UserController');
+const authentication = require('./controller/Authentication');
+const nfcTagsController = require('./controller/NFCTagsController');
+
+
+const port = process.env.SERVEUR_PORT;
 const app = express();
-
-
+app.use(express.static('public'))
 
 app.use(function (req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', `https://dwighthaul.com`);
+	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Set-Cookie,credentials');
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
 	next();
 });
 
-
-/*
-const corsOptions = {
-	origin: 'https://dwighthaul.com',
-	credentials: true,
-	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods if necessary
-	allowedHeaders: 'Content-Type,Authorization,Set-Cookie' // Specify allowed headers if necessary
-};
-
-app.use(cors(corsOptions));
-*/
-
-// Trust the first proxy (needed for secure cookies behind a reverse proxy)
 app.set('trust proxy', 1);
-
 
 // Session configuration
 app.use(session({
@@ -44,45 +45,124 @@ app.use(session({
 }));
 
 
-app.get('/', (req, res) => {
-	res.send('Home Page');
+
+const c = new SQLConnection();
+c.connect().then(() => {
+	c.syncDatabase()
+})
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
+app.get('/getUsers', (req, res) => {
+	userController.getUsers().then((data) => {
+		res.send(data);
+	});
 });
 
-app.get('/set-session', (req, res) => {
-	req.session.user = 'someUser';
-	res.send('Session is set');
+
+app.get('/getTags', (req, res) => {
+	nfcTagsController.getTags().then((data) => {
+		res.send(data);
+	});
 });
 
 
+// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
+// A priori les get ne prenent pas de body donc c'est plus simple si je laisse le serveur gérer
+app.get('/getClientIdAndSecret', (req, res) => {
+	const username = req.session?.user?.username ?? '';
+	userController.getClientIdAndSecret(username).then((data) => {
+		// Pour Paul : j'ai eu un gros soucis avec ça, si je stringify pas ton code du client ne l'accepte pas
+		// Je savais pas si je dois adapter pour que le client fit le serveur ou inversement 
+		// J'ai choisis le serveur vu qu'on utilisait deja ta fct un peu partout sur le côté client 
+		if (data) {
+			const response = {
+				"clientId": data.clientId,
+				"clientSecret": data.clientSecret
+			};
+			res.json(response);
+		} else {
+			res.json({});
+		}
 
-app.get('/get-cookie', (req, res) => {
+	});
+});
+
+
+app.post('/login', (req, res) => {
+
+	authentication.verifyLogin(req.body.username, req.body.password, (result) => {
+		if (result.status === "KO") {
+			res.sendStatus(401).send(result.data)
+			return
+		}
+		if (result.status === "OK") {
+			req.session.user = result.data
+			res.send(result.data)
+		}
+	});
+});
+
+
+app.post('/logout', (req, res) => {
+
+	console.log('logout')
+
+	delete req.session.user
+	res.sendStatus(200)
+
+});
+
+
+app.use((req, res, next) => {
 	console.log('=============');
 	console.log(req.session);
 	console.log('=============');
 
-	const user = req.session;
-
-	res.json(user);
-});
-
-app.get('/set-cookie', (req, res) => {
-	req.session.test = "IIIII"
-	console.log('=============');
-	console.log();
-	console.log('=============');
-
-	const user = req.session;
-
-	res.json(user);
-});
-
-app.get('/get-all-sessions', (req, res) => {
-	req.sessionStore.all((err, sessions) => {
-		res.json(sessions);
-	})
+	next();
 });
 
 
-app.listen(3000, () => {
-	console.log('Server is running on port:3000');
+
+
+app.post('/updateSettings', (req, res) => {
+	console.log('Update Settings')
+	// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
+	const username = req.session?.user?.username ?? '';
+	userController.updateSettings(req.body.clientId, req.body.clientSecret, username, (result) => {
+		res.sendStatus(200);
+	});
 });
+
+
+
+app.use('/api/v1/login_spotify', login_spotify.router);
+app.use('/api/v1/launch_song', launch_song);
+app.use('/api/v1/playlists', playlists);
+app.use('/api/v1/devices', devices);
+app.use('/cookie', cookie);
+
+
+// Je pourrais modifier le dashboard spotify pour qu'il redirige directement vers api/v1/login_spotify mais pour l'instant
+// pour pas trop perturber j'encapsule ça dans une fonction
+app.get('/authCredential', (req, res) => {
+	login_spotify.get_credential_spotify(req, res);
+})
+
+app.get('/', (req, res) => {
+	res.send(req.session);
+})
+
+app.get('/test', (req, res) => {
+	console.log("TOTO")
+	const hello = { hello: "jorane" }
+	res.send(hello);
+})
+
+
+app.listen(port, '0.0.0.0', () => {
+	console.log(`Example app listening on port ${port}`)
+})
