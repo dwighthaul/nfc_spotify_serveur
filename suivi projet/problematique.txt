@@ -1,0 +1,4 @@
+- Comment gérer les data runtime lié à un user ?
+   enfaite pour répondre à cette question j'ai besoin de savoir comment ce comporte le serveur express.js
+   est ce qu'il recrée le code pour chaque user ou alors il fait séquentiellement chaque requete de chaque user
+   (et l'instance de classe et la même pour tout le monde)

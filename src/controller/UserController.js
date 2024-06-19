@@ -65,7 +65,7 @@ class UserController {
 	async getUserFromUserNameAndPassword(username, password) {
 
 		return await User.findOne({
-			attributes: ['username', 'createdAt'],
+			attributes: ['id', 'username', 'createdAt'],
 			where: {
 				[Op.and]: [
 					this.sqlConnection.sequelize.where(
@@ -82,7 +82,7 @@ class UserController {
 	}
 
 	async updateSettings(clientId, clientSecret, username, callback) {
-		console.log("my user name =" + username);
+		//console.log("my user name =" + username);
 		return await User.update(
 			{ "clientId" :  clientId,
 			  "clientSecret" : clientSecret
@@ -123,7 +123,7 @@ class UserController {
 			{ username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2", passwordHash: "YWRtaW4=", NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }] },
 			{ username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=" }
 		]).then((tables) => {
-			console.log("Users data have been saved : " + tables.length + " users have been added")
+			//console.log("Users data have been saved : " + tables.length + " users have been added")
 		});
 	}
 }

@@ -6,42 +6,28 @@ const logContext = "[NewToken] ";
 var client_id = 'b6df1ac233ea4d359790c9a95ccb1ebb';
 
 
-var redirect_uri = 'http://localhost:3000/authCredential';
+var redirect_uri = 'http://localhost:3000/spotify/authCredential';
 
 
-// TODO : refaire cette classe avec la classe authentification dans route 
-module.exports = class AuthSpotify {
-	m_clientId = "";
-    m_cliendSecret = "";
-    accessTokenBearer= "";
+class UserSpotifyData {
+    constructor(clientId, cliendSecret) { this.clientId = clientId; this.cliendSecret = cliendSecret;}
+    clientId = "";
+    cliendSecret = "";
+    currentAccessTokenBearer = "";
+};
 
-    constructor() {
-	}
 
-    // TODO : je pense pas en avoir besoin comme ça sera set dans cette classe
-    set clientId(input) { this.m_clientId = input; }
-    set cliendSecret(input) { this.m_cliendSecret = input; }
-
-    // TODO : il faut aller les chercher une fois le user connecté 
-    setClientInfos(clientId_,cliendSecret_) 
-    {
-        this.clientId = clientId_;
-        this.cliendSecret = cliendSecret_;
-    }
-
-    #BasicBearer()
-    {
-        if(this.m_clientId === "" || this.m_cliendSecret==="") {
-            return "";
-        }
-        return Buffer.from(this.m_clientId + ':' + this.m_clientSecret).toString('base64');
-    }
-    
-
-    auth(req, res) {
+class AuthSpotify 
+{
+    // TODO : c'est mal géré :
+    // suggestion : il faut un bool spotify_is_set, spotify_is_connected dans la session ce qui permettrait de prendre des decissions 
+    // Pour l'instant c'est le client qui décide si il lance la page spotify (contrainte technique)
+    // Mais ça devrait plus être le server 
+    auth(req, res, userSpotifyData) {
         /// Récupérer les arguments
-        if (!this.m_clientId) {
-            res.status(500).send('Cliend_id missing');
+        //console.log('Cliend_id', userSpotifyData?.clientId);
+        if (!userSpotifyData?.clientId) {
+            res.status(500).send('Cliend_id is missing');
             return;
         }
 
@@ -53,15 +39,14 @@ module.exports = class AuthSpotify {
         res.redirect('https://accounts.spotify.com/authorize?' +
             querystring.stringify({
                 response_type: 'code',
-                client_id: this.m_clientId,
+                client_id: userSpotifyData.clientId,
                 scope: scope,
                 redirect_uri: redirect_uri,
                 state: state,
             }));
     }
     
-    
-    get_credential_spotify(req, res) {
+    get_credential_spotify(req, res, userSpotifyData) {
         req.session.loginCode = req.query.code
         req.session.loginStatus = req.query.state
 
@@ -81,7 +66,8 @@ module.exports = class AuthSpotify {
         };
     
         request.post(options, (error, reponse, body) => {
-            this.accessTokenBearer = body.access_token;
+            console.log(userSpotifyData);
+            userSpotifyData.currentAccessTokenBearer = body.access_token;
             // TODO : faire coté client une bien meilleur interface
             res.send("<script>window.close();</script >");
         });
@@ -89,14 +75,14 @@ module.exports = class AuthSpotify {
 
 
     // Recupere un nouveau access-token
-    get_new_acces_token() 
+    get_new_acces_token(clientId, cliendSecret) 
     {
         /// Récupérer les arguments
         const refreshTokenHasBeenDefined = (req?.session?.refreshToken !== undefined);
         if (!refreshTokenHasBeenDefined) { // Impossible de re-avoir un acces-token sans refresh-token
             return Promise.reject('No refresh token defined');
         }
-        const basicBearer = this.#BasicBearer();
+        const basicBearer = this.#BasicBearer(clientId, cliendSecret);
         if (basicBearer === "") {
             return Promise.reject('Could not get basic bearer'); 
         }
@@ -135,8 +121,19 @@ module.exports = class AuthSpotify {
             });
         });
     }
+
+    #BasicBearer(clientId, clientSecret)
+    {
+        if(clientId === "" || cliendSecret==="") {
+            return "";
+        }
+        return Buffer.from(clientId + ':' + clientSecret).toString('base64');
+    }
+    
 }
 
+
+module.exports = {UserSpotifyData, AuthSpotify };
 
 
 

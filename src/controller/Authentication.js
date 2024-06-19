@@ -7,14 +7,14 @@ class Authentication {
 	}
 
 	verifyLogin(username, password, callback) {
-		console.log("username", username)
+		//console.log("username", username, "| password", password)
 
 		this.userController.getUserFromUserNameAndPassword(username, password).then((data) => {
 			// verifier le password
-			console.log("data", data?.username)
+			//console.log("data", data?.username)
 
 			if (data) {
-				console.log("User " + data.username + " connecte")
+				//console.log("User " + data.username + " connecte")
 				callback({ status: "OK", data: data })
 			} else {
 				callback({ status: "KO", msg: "User not found" })

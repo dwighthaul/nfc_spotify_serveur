@@ -1,2 +1,0 @@
-1) Une alternative au double appel de getPlaylist serait d'avoir une gestion du userId courant mais cela impliquerait qu'il faut gérer 
-   Le reset en cas de changement de userSpotify lors d'une connexion user

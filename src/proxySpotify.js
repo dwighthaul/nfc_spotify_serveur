@@ -7,16 +7,22 @@ const logContext = "[ProxySpotify] ";
 
 module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera d'une classe MusicProxy qui declare les fcts suivantes
     constructor(authSpotify) {
-        // TODO : vérifier si le this est necessaire pour this.authSpotify
-        this.authSpotify = authSpotify;
+        this.m_authSpotify = authSpotify;
     }
 
-    getDevices(req, res, retries = 1) {
+    getDevices(req, res, userSpotifyData, retries = 1) {
+        /// Récupérer les arguments
+        if (!userSpotifyData) {
+            return res.statusCode(500).send("Impossible to get user Spotify data");
+        }
+        const bearer = userSpotifyData.currentAccessTokenBearer;
+
+
          /// Construire la requête
         const options = {
             url: 'https://api.spotify.com/v1/me/player/devices',
             headers: {
-                'Authorization': "Bearer " + this.authSpotify.accessTokenBearer,
+                'Authorization': "Bearer " + userSpotifyData.currentAccessTokenBearer,
             },
             json: true  
         };
@@ -27,7 +33,7 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
                 error, response, retries,
                 (retries_)=> {getDevices(req, res, retries_)},
                 () => {
-                    this.authSpotify.clientId = body.id;
+                    currentAccessTokenBearer.clientId = body.id;
                     res.send(body);
                 }, 
                 (statusCode, message) => {  // error
@@ -37,8 +43,13 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         });
     }
 
-    launchSongs(req, res, retries = 1) {
+
+    launchPlaylist(req, res, userSpotifyData, retries = 1) {
         /// Récupérer les arguments
+        if (!userSpotifyData) {
+            return res.statusCode(500).send("Impossible to get user Spotify data");
+        }
+        const bearer = userSpotifyData.currentAccessTokenBearer;
         const playlistUri = req.query.playlist_uri;
         const deviceId = req.query.id_device;
         if (!playlistUri && deviceId) {
@@ -55,7 +66,7 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
                 "position_ms": 0
             },
             headers: {
-                "Authorization": "Bearer " + this.authSpotify.accessTokenBearer,
+                "Authorization": "Bearer " + bearer,
             },
             json: true
         };
@@ -75,10 +86,14 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         });
     }
 
-    getPlaylists(req, res, retries = 1) {
+
+    getPlaylists(req, res, userSpotifyData, retries = 1) {
+        if (!userSpotifyData) {
+            return res.statusCode(500).send("Impossible to get user Spotify data");
+        }
         // TODO : voir remarque-general.txt - 1
         // TODO : voir si je peux basculer ça en async/promise
-        getInfosUser(req, res, (body) => {
+        getInfosUser(req, res, userSpotifyData, (body) => {
             /// Récupérer les arguments
             const userId = body.id;
             if (!userId) {
@@ -88,9 +103,9 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
     
              /// Construire la requête
             const options = {
-                url: "https://api.spotify.com/v1/users/" + req.session.user_id + "/playlists",
+                url: "https://api.spotify.com/v1/users/" + userId + "/playlists",
                 headers: {
-                    "Authorization": "Bearer " + req.session.accessTokenBearer,
+                    "Authorization": "Bearer " + userSpotifyData.currentAccessTokenBearer,
                 },
                 json: true
             }
@@ -109,19 +124,18 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
                 );
             });
         })
-    }
-        
+    }  
 
-    #getInfosUser(req, res, callback, retries = 1)
+    #getInfosUser(req, res, userSpotifyData, callback, retries = 1)
     {
         /// Récupérer les arguments
-        const bearer = req.session.accessTokenBearer;
+        const bearer = userSpotifyData.currentAccessTokenBearer;
 
         /// Construire la requête
         const options = {
             url: 'https://api.spotify.com/v1/me',
             headers: {
-                'Authorization': "Bearer " + req.session.accessTokenBearer,
+                'Authorization': "Bearer " + bearer,
             },
             json: true  // si on ne met pas ce champ il faut parser le body avec JSON.parse(body)     
         };
@@ -160,7 +174,7 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         else if (response.statusCode === 401)  
         {
             if (retries > 0) {
-                authSpotify.get_new_acces_token()
+                this.m_authSpotify.get_new_acces_token(userSpotifyData.clientId, userSpotifyData.clientSecret)
                 .then(() => {
                     // Relance la requête original mais en décrementant le nombre d'essai
                     // On n'utilise pas un postfix decrement operator donc on est bon

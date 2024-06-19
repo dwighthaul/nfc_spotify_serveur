@@ -1,0 +1,4 @@
+- si une session est finie on doit le déconnecter nous même
+    - On doit savoir quand un session est finie (elle peut timeout c'est pas forcement la deconnection de l'utilsateur)
+
+- on pourrait partir sur Redis pour gérer les data runtime
