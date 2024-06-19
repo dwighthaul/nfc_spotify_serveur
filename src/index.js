@@ -13,6 +13,9 @@ const port = process.env.SERVEUR_PORT;
 const app = express();
 app.use(express.static('public'))
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
