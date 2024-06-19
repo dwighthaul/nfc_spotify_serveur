@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "./src/index.js",
 	"scripts": {
-		"start": "nodemon ./src/index.js",
-		"dev": "set NODE_ENV=local && npm start",
-		"prod": "export NODE_ENV=production && npm start"
+		"start": "set NODE_ENV=local && nodemon ./src/index.js",
+		"dev": "set NODE_ENV=local && nodemon ./src/index.js",
+		"prod": "export NODE_ENV=production && nodemon ./src/index.js"
 	},
 	"author": "",
 	"license": "ISC",
