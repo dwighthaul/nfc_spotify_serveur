@@ -17,7 +17,7 @@ class SQLConnection {
 
 		try {
 			await this.sequelize.authenticate();
-			console.log('Connection has been established successfully.');
+			//console.log('Connection has been established successfully.');
 		} catch (error) {
 			console.error('Unable to connect to the database:', error);
 		}
@@ -36,7 +36,7 @@ class SQLConnection {
 
 		this.sequelize.sync({ force: true })
 			.then(() => {
-				console.log('Database and tables created successfully');
+				//console.log('Database and tables created successfully');
 				userController.initData().then(() => {
 					nfcTagsController.initData()
 

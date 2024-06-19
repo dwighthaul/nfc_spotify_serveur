@@ -1,3 +1,11 @@
+--- Refresh Token ---
+
+Il y a 2 façons de faire selon moi : 
+un middleware qui quand il a un code token_invalid stocke la requete et en redemande acces_token (a l'aide du refresh_token)
+Sur spotify on peut savoir quand il sera expiré donc il suffit de demander avant
+
+
+
 --- SERVER ---
 
 Alors on veut qu'une authentification nous récupère un TOKEN valide

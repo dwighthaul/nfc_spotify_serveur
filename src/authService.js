@@ -10,7 +10,6 @@ module.exports = class Auth {
 	}
 
 	auth(req, callback) {
-		console.log(req.session.loginCode)
 		const options = {
 			url: 'https://accounts.spotify.com/api/token',
 			form: {
@@ -32,10 +31,9 @@ module.exports = class Auth {
 	};
 
 	getLogin(res) {
-
 		var state = "OzeSpnW3t00EsMKw";
 		var scope = 'user-read-private user-modify-playback-state user-read-playback-state';
-		console.log("Demande d'autorisation a spotify et redirection vers : " + redirect_uri)
+		//console.log("Demande d'autorisation a spotify et redirection vers : " + redirect_uri)
 		res.redirect('https://accounts.spotify.com/authorize?' +
 			querystring.stringify({
 				response_type: 'code',
@@ -47,17 +45,16 @@ module.exports = class Auth {
 	}
 
 	dealLogin(req, callback) {
-		console.log(`Login succes : `)
-		console.log(`Code : ` + req.query.code)
-		console.log(`State : ` + req.query.state)
+		//console.log(`Login succes : `)
+		//console.log(`Code : ` + req.query.code)
+		//console.log(`State : ` + req.query.state)
 		req.session.loginCode = req.query.code
 		req.session.loginStatus = req.query.state
 
 		this.auth(req, () => {
-			console.log("Auth OK")
+			//console.log("Auth OK")
 			callback()
 		})
 	}
-
 }
 
