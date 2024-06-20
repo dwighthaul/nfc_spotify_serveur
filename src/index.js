@@ -6,7 +6,7 @@ const user = require('./routes/user');
 const spotify = require('./routes/spotify');
 const userRuntimeDataHandler = require("./userRuntimeDataHandler");
 const ServerConfig = require('./configuration/ServerConfig.js');
-require('./config.js');
+require('./configuration/config.js');
 
 const app = express();
 

@@ -3,6 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const user = require('./../routes/user');
 const spotify = require('./../routes/spotify');
+const cookieManager = require('./../routes/cookieManager');
 const userRuntimeDataHandler = require("./../userRuntimeDataHandler");
 const SQLConnection = require('../controller/SQLConnection');
 
@@ -54,6 +55,7 @@ class ServerConfig {
 	initRoutes() {
 		this.app.use('/spotify/', spotify);
 		this.app.use('/user/', user);
+		this.app.use('/cookie/', cookieManager);
 
 		this.app.get('/', (req, res) => {
 			res.send(req.session);

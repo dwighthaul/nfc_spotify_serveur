@@ -2,6 +2,8 @@
 const { DataTypes, Op } = require('sequelize');
 const User = require('../model/User');
 const NFCTags = require('../model/NFCTags');
+const Role = require('../model/Role');
+const rolesController = require('./db/RoleController');
 
 class UserController {
 	initSchema(SQLConnection) {
@@ -30,26 +32,37 @@ class UserController {
 					unique: true,
 					notNull: true,
 					notEmpty: true
-				},
+				}
 			},
 			{ sequelize: SQLConnection.sequelize },
 		)
 	}
 
 	async getUsers() {
-		const users = await User.findAll({ include: NFCTags });
+		const users = await User.findAll({ include: NFCTags, include: Role });
 		return users
 	}
 
-	async getClientIdAndSecret(username) {
+	async getRolesDepuisIdUser(id) {
+		return await User.findOne({
+			attributes: ["roleId"],
+			include: Role,
+			where: {
+				"id": id
+			}
+		});
+	}
+
+	async getClientIdAndSecret(id) {
+		console.log("id : ", id)
 		return await User.findOne({
 			attributes: ['clientId', 'clientSecret'],
 			where: {
-				"username": username
+				"id": id
 			}
 		})
 	}
-	
+
 	async getUserByUsername(username) {
 		return await User.findOne({
 			where: {
@@ -65,6 +78,7 @@ class UserController {
 	async getUserFromUserNameAndPassword(username, password) {
 
 		return await User.findOne({
+			include: Role,
 			attributes: ['id', 'username', 'createdAt'],
 			where: {
 				[Op.and]: [
@@ -84,15 +98,16 @@ class UserController {
 	async updateSettings(clientId, clientSecret, username, callback) {
 		//console.log("my user name =" + username);
 		return await User.update(
-			{ "clientId" :  clientId,
-			  "clientSecret" : clientSecret
+			{
+				"clientId": clientId,
+				"clientSecret": clientSecret
 			},
 			{
-			  where: {
-				"username": username,
-			  },
+				where: {
+					"username": username,
+				},
 			},
-		  ).then(callback);
+		).then(callback);
 	}
 
 
@@ -118,13 +133,25 @@ class UserController {
 
 	async initData() {
 
+		rolesController.getRoleByName("admin").then((roleAdmin) => {
+			const users = User.bulkCreate([
+				{
+					username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2", passwordHash: "YWRtaW4=",
+					roleId: roleAdmin.id,
+					NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }]
+				},
+				{
+					username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5",
+					roleId: roleAdmin.id,
 
-		const users = User.bulkCreate([
-			{ username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2", passwordHash: "YWRtaW4=", NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }] },
-			{ username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=" }
-		]).then((tables) => {
-			//console.log("Users data have been saved : " + tables.length + " users have been added")
-		});
+					passwordHash: "YWRtaW4="
+				}
+			]).then((tables) => {
+				//console.log("Users data have been saved : " + tables.length + " users have been added")
+			});
+
+		})
+
 	}
 }
 const userController = new UserController();

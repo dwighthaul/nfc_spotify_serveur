@@ -3,6 +3,8 @@ const userController = require('./UserController');
 const nfcTagsController = require('./NFCTagsController');
 const NFCTags = require('../model/NFCTags');
 const User = require('../model/User');
+const rolesController = require('./db/RoleController');
+const Role = require('../model/Role');
 require('dotenv').config()
 
 class SQLConnection {
@@ -25,6 +27,7 @@ class SQLConnection {
 	}
 
 	syncDatabase() {
+		rolesController.initSchema(this)
 		userController.initSchema(this)
 		nfcTagsController.initSchema(this)
 
@@ -34,12 +37,38 @@ class SQLConnection {
 			}
 		});
 
+
+		Role.hasMany(User, {
+			foreignKey: {
+				name: "roleId"
+			}
+		})
+		User.belongsTo(Role, {
+			foreignKey: {
+				name: "roleId"
+			}
+		});
+
+
+
+		/*=> {
+			User.belongsTo(, {
+				foreignKey: 'roleId',
+				as: 'role',
+			});
+		};*/
+
+
+
+
 		this.sequelize.sync({ force: true })
 			.then(() => {
 				//console.log('Database and tables created successfully');
-				userController.initData().then(() => {
-					nfcTagsController.initData()
+				rolesController.initData().then(() => {
+					userController.initData().then(() => {
+						nfcTagsController.initData()
 
+					})
 				})
 			})
 			.catch(err => {
