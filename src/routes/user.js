@@ -98,7 +98,7 @@ router.get('/getSession', (req, res) => {
 
 
 router.post('/updateSettings', (req, res) => {
-	//console.log('Update Settings')
+	console.log('Update Settings')
 	// TODO : voir ce qui est la best practice, le server gere la session ou le client (et il envoie le username en parametre)
 	const username = req.session?.user?.username ?? '';
 	userController.updateSettings(req.body.clientId, req.body.clientSecret, username, (result) => {

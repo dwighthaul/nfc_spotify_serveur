@@ -66,7 +66,6 @@ class AuthSpotify
         };
     
         request.post(options, (error, reponse, body) => {
-            console.log(userSpotifyData);
             userSpotifyData.currentAccessTokenBearer = body.access_token;
             // TODO : faire coté client une bien meilleur interface
             res.send("<script>window.close();</script >");

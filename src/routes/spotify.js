@@ -36,12 +36,12 @@ router.get('/devices', getUserSpotifyData, (req, res) => {
 })
 
 
-router.get('launchPlaylist', getUserSpotifyData, (req,res) => {
+router.get('/launchPlaylist', getUserSpotifyData, (req,res) => {
     proxySpotify.launchPlaylist(req, res, req.userSpotifyData);
 })
 
 
-router.get('playlists', getUserSpotifyData, (req,res) => {
+router.get('/playlists', getUserSpotifyData, (req,res) => {
     proxySpotify.getPlaylists(req, res, req.userSpotifyData);
 })
 
