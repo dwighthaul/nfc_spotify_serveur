@@ -136,12 +136,12 @@ class UserController {
 		rolesController.getRoleByName("admin").then((roleAdmin) => {
 			const users = User.bulkCreate([
 				{
-					username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2", passwordHash: "YWRtaW4=",
+					username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=",
 					roleId: roleAdmin.id,
 					NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }]
 				},
 				{
-					username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5",
+					username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2",
 					roleId: roleAdmin.id,
 
 					passwordHash: "YWRtaW4="
