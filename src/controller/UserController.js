@@ -141,7 +141,7 @@ class UserController {
 					NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }]
 				},
 				{
-					username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5",
+					username: "Jorane", clientId: "572c12e9e5c24075a129cb1329b33ca6", clientSecret: "991dcba4bfd744b5bba7c62a98d4d82d",
 					roleId: roleAdmin.id,
 
 					passwordHash: "YWRtaW4="
