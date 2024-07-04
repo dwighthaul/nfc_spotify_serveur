@@ -5,8 +5,8 @@ const SQLConnection = require('./controller/SQLConnection');
 const user = require('./routes/user');
 const spotify = require('./routes/spotify');
 const userRuntimeDataHandler = require("./userRuntimeDataHandler");
-const ServerConfig = require('./configuration/ServerConfig.js');
 require('./configuration/config.js');
+const ServerConfig = require('./configuration/ServerConfig.js');
 
 const app = express();
 
