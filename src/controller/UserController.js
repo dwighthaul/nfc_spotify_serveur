@@ -54,7 +54,6 @@ class UserController {
 	}
 
 	async getClientIdAndSecret(id) {
-		console.log("id : ", id)
 		return await User.findOne({
 			attributes: ['clientId', 'clientSecret'],
 			where: {
@@ -136,15 +135,10 @@ class UserController {
 		rolesController.getRoleByName("admin").then((roleAdmin) => {
 			const users = User.bulkCreate([
 				{
-					username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=",
-					roleId: roleAdmin.id,
-					NFCTags: [{ tagId: "1234_2", playlist: "b6df1ac233ea4d359790c9a95ccb1ebb_3", device: "dea14dbcfe904185b99bee1d5d75ede5_4" }]
+					username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=", roleId: roleAdmin.id
 				},
 				{
-					username: "Jorane", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb_2", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5_2",
-					roleId: roleAdmin.id,
-
-					passwordHash: "YWRtaW4="
+					username: "Jorane", clientId: "572c12e9e5c24075a129cb1329b33ca6", clientSecret: "991dcba4bfd744b5bba7c62a98d4d82d", passwordHash: "YWRtaW4=", roleId: roleAdmin.id
 				}
 			]).then((tables) => {
 				//console.log("Users data have been saved : " + tables.length + " users have been added")
