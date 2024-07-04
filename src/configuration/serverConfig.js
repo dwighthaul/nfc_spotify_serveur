@@ -1,10 +1,10 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const user = require('./../routes/user');
-const spotify = require('./../routes/spotify');
-const cookieManager = require('./../routes/cookieManager');
-const userRuntimeDataHandler = require("./../userRuntimeDataHandler");
+const user = require('../routes/user');
+const spotify = require('../routes/spotify');
+const cookieManager = require('../routes/cookieManager');
+const userRuntimeDataHandler = require("../userRuntimeDataHandler");
 const SQLConnection = require('../controller/SQLConnection');
 
 

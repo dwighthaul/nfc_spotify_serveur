@@ -1,10 +1,4 @@
 const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const SQLConnection = require('./controller/SQLConnection');
-const user = require('./routes/user');
-const spotify = require('./routes/spotify');
-const userRuntimeDataHandler = require("./userRuntimeDataHandler");
 require('./configuration/config.js');
 const ServerConfig = require('./configuration/ServerConfig.js');
 
