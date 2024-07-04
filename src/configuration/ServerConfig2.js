@@ -20,7 +20,7 @@ class ServerConfig {
 		this.app.use(express.static('public'));
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
-
+		console.log("Auth depuis le chemin suivant : ", process.env.CLIENT_ENDPOINT)
 		this.app.use((req, res, next) => {
 			res.setHeader('Access-Control-Allow-Origin', `${process.env.CLIENT_ENDPOINT}`);
 			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
