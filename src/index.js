@@ -1,6 +1,6 @@
 const express = require('express');
 require('./configuration/config.js');
-const ServerConfig = require('./configuration/ServerConfig.js');
+const ServerConfig = require('./configuration/ServerConfig2.js');
 
 const app = express();
 
