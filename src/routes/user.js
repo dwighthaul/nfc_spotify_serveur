@@ -65,8 +65,6 @@ router.post('/login', (req, res) => {
 			let user = result.data;
 			req.session.user = user;
 
-			console.log("user : ", user.id)
-
 			userController.getClientIdAndSecret(user.id)
 				.then((data) => {
 					const userSpotifyData = new UserSpotifyData(data.clientId, data.clientSecret);
