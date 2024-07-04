@@ -8,6 +8,7 @@ const userRuntimeDataHandler = require("../userRuntimeDataHandler");
 const SQLConnection = require('../controller/SQLConnection');
 
 
+
 class ServerConfig {
 
 	// Construction a partir des configurations

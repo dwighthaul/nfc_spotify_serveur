@@ -5,6 +5,7 @@ const ServerConfig = require('./configuration/ServerConfig.js');
 const app = express();
 
 
+
 const serverConfig = new ServerConfig(app);
 serverConfig.initMiddlewares();
 serverConfig.initSession();
