@@ -1,19 +1,6 @@
 const express = require('express');
-const path = require('path');
-
-console.log("process.env.NODE_ENV : " + process.env.NODE_ENV)
-
-const NODE_ENV = process.env.NODE_ENV.trim()
-console.log("Lancement du serveur avec la config suivante : " + NODE_ENV + '--')
-
-const pathURL = `./../.env.${NODE_ENV}`
-
-console.log("Lancement du serveur avec la config suivante : " + pathURL + '--')
-
-require('dotenv').config({ "path": path.resolve(__dirname, pathURL) })
-
 const ServerConfig = require('./configuration/ServerConfig2.js');
-
+require("./configuration/config.js")
 const app = express();
 
 
