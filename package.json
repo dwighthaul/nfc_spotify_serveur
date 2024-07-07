@@ -23,7 +23,8 @@
 		"pg-hstore": "^2.3.4",
 		"postgres": "^3.4.4",
 		"request": "^2.88.2",
-		"sequelize": "^6.37.3"
+		"sequelize": "^6.37.3",
+		"ts-node": "^10.9.2"
 	},
 	"devDependencies": {
 		"typescript": "^5.5.3"
