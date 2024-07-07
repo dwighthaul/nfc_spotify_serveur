@@ -1,46 +1,46 @@
 
-const AuthSpotify = require('./authSpotify');
-const request = require('request');
+import request from 'request';
+
 // Il s'agit d'un controller, on reverra pour le nom... 
 
 const logContext = "[ProxySpotify] ";
 
-module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera d'une classe MusicProxy qui declare les fcts suivantes
+export class ProxySpotify {
+    // TODO : Changer les types
+    m_authSpotify: any;
+    userSpotifyData: any;
     constructor(authSpotify) {
         this.m_authSpotify = authSpotify;
     }
 
 
     // La callback defini le send qu'on va faire client
-    #handle_response_and_send_to_client(error, response, retries, original_request, callbackSuccess, callbackError)
-    {
+    #handle_response_and_send_to_client(error, response, userSpotifyData, retries, original_request, callbackSuccess, callbackError) {
         if (error) {
             // TODO : décider ce qu'il faut return lors d'une erreur request spotify server (500 ou response.codeStatus)
             callbackError(500, logContext + "Error from spotify server");
             return;
         }
-        
+
         // Succes
-        if (response.statusCode === 200)  
-        {
+        if (response.statusCode === 200) {
             callbackSuccess();
-            return ;
-        } 
+            return;
+        }
         // Le token a expiré, il nous en faut un nouveau
-        else if (response.statusCode === 401)  
-        {
+        else if (response.statusCode === 401) {
             if (retries > 0) {
                 this.m_authSpotify.get_new_acces_token(userSpotifyData.clientId, userSpotifyData.clientSecret)
-                .then(() => {
-                    // Relance la requête original mais en décrementant le nombre d'essai
-                    // On n'utilise pas un postfix decrement operator donc on est bon
-                    original_request(retries - 1);
-                    console.warn(logContext + "Orignal_request must always end with a return");              
-                })
-                .catch((error) => {
-                    callbackError(401, error);
-                    return;
-                })
+                    .then(() => {
+                        // Relance la requête original mais en décrementant le nombre d'essai
+                        // On n'utilise pas un postfix decrement operator donc on est bon
+                        original_request(retries - 1);
+                        console.warn(logContext + "Orignal_request must always end with a return");
+                    })
+                    .catch((error) => {
+                        callbackError(401, error);
+                        return;
+                    })
             }
             else {
                 callbackError(401, logContext + "Could not connect to Spotify");
@@ -50,7 +50,7 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         // Default case
         callbackError(response.statusCode, logContext + "Unexpected response from Spotify");
         return;
-    } 
+    }
 
 
     getDevices(req, res, userSpotifyData, retries = 1) {
@@ -60,26 +60,26 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
             return;
         }
         const bearer = userSpotifyData.currentAccessTokenBearer;
-    
-         /// Construire la requête
+
+        /// Construire la requête
         const options = {
             url: 'https://api.spotify.com/v1/me/player/devices',
             headers: {
                 'Authorization': "Bearer " + bearer,
             },
-            json: true  
+            json: true
         };
 
         /// Envoyer la requête
         request.get(options, (error, response, body) => {
             this.#handle_response_and_send_to_client(
-                error, response, retries,
-                (retries_)=> {getDevices(req, res, retries_)},
+                error, response, userSpotifyData, retries,
+                (retries_) => { this.getDevices(req, res, retries_) },
                 () => {
                     // TODO : WTF IS THIS ??
                     //currentAccessTokenBearer.clientId = body.id;
                     res.send(body);
-                }, 
+                },
                 (statusCode, message) => {  // error
                     res.status(statusCode).send(message);
                 }
@@ -96,7 +96,7 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         const bearer = userSpotifyData.currentAccessTokenBearer;
         const playlistUri = req.query.playlist_uri;
         const deviceId = req.query.id_device;
-        if ( !(playlistUri && deviceId && bearer) ) {
+        if (!(playlistUri && deviceId && bearer)) {
             res.status(400).send('Missing parameter(s)');
             return;
         }
@@ -114,15 +114,17 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
             },
             json: true
         };
-        
+
         /// Envoyer la requête
         request.put(options, (error, response, body) => {
             this.#handle_response_and_send_to_client(
-                error, response, retries,
-                (retries_)=> {launchSongs(req, res, retries_)}, 
+                error, response, userSpotifyData, retries,
+                (retries_) => { //launchSongs(req, res, userSpotifyData, retries_) 
+
+                },
                 () => {
                     res.status(200).send("Playlist successfully started");
-                }, 
+                },
                 (statusCode, message) => {  // error
                     res.status(statusCode).send(message);
                 }
@@ -137,15 +139,15 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         }
         // TODO : voir remarque-general.txt - 1
         // TODO : voir si je peux basculer ça en async/promise
-        this.#getInfosUser(req, res, userSpotifyData, (body) => {
+        this.getInfosUser(req, res, userSpotifyData, (body) => {
             /// Récupérer les arguments
             const userId = body.id;
             if (!userId) {
                 res.status(400).send('Could not get userId');
                 return;
             }
-    
-             /// Construire la requête
+
+            /// Construire la requête
             const options = {
                 url: "https://api.spotify.com/v1/users/" + userId + "/playlists",
                 headers: {
@@ -153,25 +155,24 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
                 },
                 json: true
             }
-    
+
             /// Envoyer la requête
             request.get(options, (error, response, body) => {
                 this.#handle_response_and_send_to_client(
-                    error, response, retries,
-                    (retries_)=> {getInfosUser(req, res, retries_)}, 
+                    error, response, userSpotifyData, retries,
+                    (retries_) => { this.getInfosUser(req, res, userSpotifyData, retries_) },
                     () => {
                         res.send(body);
-                    }, 
+                    },
                     (statusCode, message) => {  // error
                         res.status(statusCode).send(message);
                     }
                 );
             });
         })
-    }  
+    }
 
-    #getInfosUser(req, res, userSpotifyData, callback, retries = 1)
-    {
+    private getInfosUser(req, res, userSpotifyData, callback, retries = 1) {
         /// Récupérer les arguments
         const bearer = userSpotifyData.currentAccessTokenBearer;
 
@@ -187,11 +188,11 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         /// Envoyer la requête
         request.get(options, (error, response, body) => {
             this.#handle_response_and_send_to_client(
-                error, response, retries, 
-                (retries_)=> {this.#getInfosUser(req, res, callback, retries_)},
+                error, response, userSpotifyData, retries,
+                (retries_) => { this.getInfosUser(req, res, userSpotifyData, callback, retries_) },
                 () => {
                     callback(body);
-                }, 
+                },
                 (statusCode, message) => { // error
                     res.status(statusCode).send(message);
                 }
@@ -199,5 +200,3 @@ module.exports = class ProxySpotify { // Quand on utilisera spotify on derivera 
         });
     }
 }
-
-   

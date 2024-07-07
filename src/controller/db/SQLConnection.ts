@@ -1,10 +1,11 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const userController = require('./UserController');
-const nfcTagsController = require('./NFCTagsController');
-const NFCTags = require('../model/NFCTags');
-const User = require('../model/User');
-const rolesController = require('./db/RoleController');
-const Role = require('../model/Role');
+import { Sequelize } from "sequelize";
+import NFCTags from "../../model/NFCTags";
+import Role from "../../model/Role";
+import User from "../../model/User";
+import { nfcTagsController } from "./NFCTagsController";
+import { rolesController } from "./RoleController";
+import { userController } from "./UserController";
+
 require('dotenv').config()
 
 class SQLConnection {
@@ -49,25 +50,12 @@ class SQLConnection {
 			}
 		});
 
-
-
-		/*=> {
-			User.belongsTo(, {
-				foreignKey: 'roleId',
-				as: 'role',
-			});
-		};*/
-
-
-
-
 		this.sequelize.sync({ force: true })
 			.then(() => {
 				//console.log('Database and tables created successfully');
 				rolesController.initData().then(() => {
 					userController.initData().then(() => {
 						nfcTagsController.initData()
-
 					})
 				})
 			})
@@ -80,4 +68,5 @@ class SQLConnection {
 
 
 
-module.exports = SQLConnection;
+export { SQLConnection };
+

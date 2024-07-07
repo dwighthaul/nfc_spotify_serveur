@@ -4,4 +4,4 @@ const User = require("./User");
 class NFCTags extends Model {
 }
 
-module.exports = NFCTags;
+export = NFCTags;

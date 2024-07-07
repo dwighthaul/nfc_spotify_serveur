@@ -1,10 +1,9 @@
-const querystring = require('node:querystring');
-const request = require('request');
 
-const logContext = "[NewToken] ";
+import querystring from 'node:querystring';
+import request from 'request';
+
 // Seront définis plus tard en bdd quand on aura la gestion de user/login
 
-var redirect_uri = `${process.env.SERVEUR_ENDPOINT}/spotify/authCredential`;
 
 
 class UserSpotifyData {
@@ -39,7 +38,7 @@ class AuthSpotify {
                 response_type: 'code',
                 client_id: userSpotifyData.clientId,
                 scope: scope,
-                redirect_uri: redirect_uri,
+                redirect_uri: this.getUrlRedirect(),
                 state: state,
             }));
     }
@@ -57,7 +56,7 @@ class AuthSpotify {
                 url: 'https://accounts.spotify.com/api/token',
                 form: {
                     code: req.session.loginCode,
-                    redirect_uri: redirect_uri,
+                    redirect_uri: this.getUrlRedirect(),
                     grant_type: 'authorization_code'
                 },
                 headers: {
@@ -80,6 +79,8 @@ class AuthSpotify {
     // Recupere un nouveau access-token
     get_new_acces_token(clientId, cliendSecret) {
         /// Récupérer les arguments
+        // TODO : req not defined
+        /*
         const refreshTokenHasBeenDefined = (req?.session?.refreshToken !== undefined);
         if (!refreshTokenHasBeenDefined) { // Impossible de re-avoir un acces-token sans refresh-token
             return Promise.reject('No refresh token defined');
@@ -88,7 +89,6 @@ class AuthSpotify {
         if (basicBearer === "") {
             return Promise.reject('Could not get basic bearer');
         }
-
         /// Construire la requête
         var authOptions = {
             url: 'https://accounts.spotify.com/api/token',
@@ -102,7 +102,6 @@ class AuthSpotify {
             },
             json: true
         };
-
         /// Envoyer la requête 
         return new Promise((resolve, reject) => {
             request.post(authOptions, function (error, response, body) {
@@ -121,22 +120,22 @@ class AuthSpotify {
                     reject(logContext + "Unexpected response from Spotify");
                 }
             });
-        });
+        });*/
     }
 
-    #BasicBearer(clientId, clientSecret) {
-        if (clientId === "" || cliendSecret === "") {
+    private BasicBearer(clientId, clientSecret) {
+        if (clientId === "" || clientSecret === "") {
             return "";
         }
         return Buffer.from(clientId + ':' + clientSecret).toString('base64');
     }
 
+    private getUrlRedirect = () => {
+        return `${process.env.SERVEUR_ENDPOINT}/spotify/authCredential`
+    }
+
 }
 
 
-module.exports = { UserSpotifyData, AuthSpotify };
-
-
-
-
+export { AuthSpotify, UserSpotifyData };
 

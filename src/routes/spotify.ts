@@ -1,13 +1,13 @@
-const { Router } = require('express');
-const router = Router();
-const { AuthSpotify } = require('./../authSpotify');
-const ProxySpotify = require('./../proxySpotify');
-const userRuntimeDataHandler = require("./../userRuntimeDataHandler");
+import { Router } from 'express';
+import { AuthSpotify } from '../authSpotify';
+import { ProxySpotify } from '../proxySpotify';
+import userRuntimeDataHandler = require("./../userRuntimeDataHandler");
 
 const authSpotify = new AuthSpotify();
 const proxySpotify = new ProxySpotify(authSpotify);
 
 
+const router = Router();
 
 
 const reloadSession = (req, res, next) => {
@@ -60,4 +60,4 @@ router.get('/playlists', getUserSpotifyData, (req, res) => {
 
 
 
-module.exports = router;
+export = router;

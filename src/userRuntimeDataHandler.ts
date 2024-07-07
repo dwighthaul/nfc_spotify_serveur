@@ -3,32 +3,29 @@ const UserDataSpotify = require('./authSpotify');
 
 // Ultérieurement cette classe utilisera Redis afin de stocker dans la ram les données runtime des users connectées
 // Pour l'instant elle stocke juste en mémoire runtime dans une map les infos 
-class UserRuntimeDataHandler 
-{
+class UserRuntimeDataHandler {
+    userIdToUserSpotifyData: Map<String, any>;
     constructor() {
         this.userIdToUserSpotifyData = new Map();
     }
 
-    getUserDataSpotify(userId) 
-    {
+    getUserDataSpotify(userId) {
         return this.userIdToUserSpotifyData.get(userId);
     }
 
     // Quand le user se connecte
-    addUser(userId, userDataSpotify)
-    {
+    addUser(userId, userDataSpotify) {
         this.userIdToUserSpotifyData.set(userId, userDataSpotify);
     }
 
     // Quand le user se deconnecte ou timeout
-    delUser(userId)
-    {
+    delUser(userId) {
 
     }
-    
+
 }
 
 const userRuntimeDataHandler = new UserRuntimeDataHandler();
 
 
-module.exports = userRuntimeDataHandler
+export = userRuntimeDataHandler

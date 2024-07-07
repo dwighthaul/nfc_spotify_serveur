@@ -1,6 +1,8 @@
-const express = require('express');
-const ServerConfig = require('./configuration/ServerConfig2.js');
-require("./configuration/config.js")
+import express from 'express';
+import ServerConfig from './configuration/ServerConfig';
+
+
+require("./configuration/config")
 const app = express();
 
 

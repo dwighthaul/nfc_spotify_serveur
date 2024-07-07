@@ -33,4 +33,4 @@ router.get('/set-cookie-authorisation', (req, res) => {
 	res.json(user);
 });
 
-module.exports = router
+export = router

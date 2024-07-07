@@ -1,5 +1,5 @@
 // Check if the user has the required permission for a route
-exports.checkPermission = (permission) => {
+const checkPermission = (permission) => {
 
 	return (req, res, next) => {
 		const userPermissions = req.session.user?.Role?.permissions ? req.session.user.Role.permissions : [];
@@ -11,3 +11,5 @@ exports.checkPermission = (permission) => {
 		}
 	};
 };
+
+export = { checkPermission }

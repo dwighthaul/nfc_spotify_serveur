@@ -1,10 +1,9 @@
+import NFCTags from "../../model/NFCTags";
 
 const { DataTypes } = require('sequelize');
-const NFCTags = require('../model/NFCTags');
-const User = require('../model/User');
-const userController = require('./UserController');
 
 class NFCTagsController {
+	sqlConnection;
 	initSchema(SQLConnection) {
 		this.sqlConnection = SQLConnection
 		NFCTags.init(
@@ -56,4 +55,5 @@ class NFCTagsController {
 const nfcTagsController = new NFCTagsController();
 
 
-module.exports = nfcTagsController
+export { nfcTagsController };
+

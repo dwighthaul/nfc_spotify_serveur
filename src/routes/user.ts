@@ -1,14 +1,13 @@
+import { UserSpotifyData } from "../authSpotify";
+import { authentication } from "../controller/Authentication";
+import { nfcTagsController } from "../controller/db/NFCTagsController";
+import { userController } from "../controller/db/UserController";
+import rbacMiddleware from "../middleware/rbacMiddleware";
+import userRuntimeDataHandler from "../userRuntimeDataHandler";
+
 const { Router } = require('express');
 const router = Router();
 
-
-const SQLConnection = require('./../controller/SQLConnection');
-const userController = require('./../controller/UserController');
-const authentication = require('./../controller/Authentication');
-const nfcTagsController = require('./../controller/NFCTagsController');
-const userRuntimeDataHandler = require("./../userRuntimeDataHandler");
-const { UserSpotifyData } = require("./../authSpotify");
-const rbacMiddleware = require('./../middleware/rbacMiddleware');
 
 
 router.get('/getUsers', (req, res) => {
@@ -105,4 +104,4 @@ router.post('/updateSettings', (req, res) => {
 });
 
 
-module.exports = router;
+export = router;

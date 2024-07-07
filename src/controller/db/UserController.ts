@@ -1,11 +1,13 @@
+import { DataTypes, Op } from 'sequelize';
+import NFCTags from '../../model/NFCTags';
+import Role from '../../model/Role';
+import User from '../../model/User';
+import { rolesController } from './RoleController';
 
-const { DataTypes, Op } = require('sequelize');
-const User = require('../model/User');
-const NFCTags = require('../model/NFCTags');
-const Role = require('../model/Role');
-const rolesController = require('./db/RoleController');
 
 class UserController {
+	sqlConnection;
+
 	initSchema(SQLConnection) {
 		this.sqlConnection = SQLConnection
 		User.init(
@@ -39,7 +41,8 @@ class UserController {
 	}
 
 	async getUsers() {
-		const users = await User.findAll({ include: NFCTags, include: Role });
+		// TODO : Ajouter  include: NFCTags, 
+		const users = await User.findAll({ include: [Role, NFCTags] });
 		return users
 	}
 
@@ -68,10 +71,6 @@ class UserController {
 				"username": username
 			}
 		});
-	}
-
-	async getUserByUsername() {
-		return await User.findAll();
 	}
 
 	async getUserFromUserNameAndPassword(username, password) {
@@ -110,22 +109,13 @@ class UserController {
 	}
 
 
-	async saveSettings(client_id, secret_client) {
+	async saveSettings(client_id, secret_client, idUser) {
 
 		return await User.findOne({
 			attributes: ['username', 'createdAt'],
 			where: {
-				[Op.and]: [
-					this.sqlConnection.sequelize.where(
-						this.sqlConnection.sequelize.fn('lower', this.sqlConnection.sequelize.col('username')),
-						this.sqlConnection.sequelize.fn('lower', username)
-					),
-					this.sqlConnection.sequelize.where(
-						this.sqlConnection.sequelize.fn('lower', this.sqlConnection.sequelize.col('passwordHash')),
-						this.sqlConnection.sequelize.fn('lower', btoa(password))
-					)
-				]
-			}
+				"id": idUser,
+			},
 		});
 	}
 
@@ -141,7 +131,7 @@ class UserController {
 					username: "Jorane", clientId: "572c12e9e5c24075a129cb1329b33ca6", clientSecret: "991dcba4bfd744b5bba7c62a98d4d82d", passwordHash: "YWRtaW4=", roleId: roleAdmin.id
 				}
 			]).then((tables) => {
-				//console.log("Users data have been saved : " + tables.length + " users have been added")
+				console.log("Users data have been saved : " + tables.length + " users have been added")
 			});
 
 		})
@@ -151,4 +141,5 @@ class UserController {
 const userController = new UserController();
 
 
-module.exports = userController
+export { userController };
+

@@ -1,8 +1,9 @@
+import { DataTypes } from "sequelize";
+import Role from "../../model/Role";
 
-const { DataTypes } = require('sequelize');
-const Role = require('../../model/Role');
 
 class RoleController {
+	sqlConnection;
 	initSchema(SQLConnection) {
 		this.sqlConnection = SQLConnection
 		Role.init(
@@ -50,4 +51,5 @@ class RoleController {
 const rolesController = new RoleController();
 
 
-module.exports = rolesController
+export { rolesController };
+

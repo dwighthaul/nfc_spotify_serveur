@@ -1,15 +1,16 @@
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const user = require('../routes/user');
-const spotify = require('../routes/spotify');
-const cookieManager = require('../routes/cookieManager');
-const userRuntimeDataHandler = require("../userRuntimeDataHandler");
-const SQLConnection = require('../controller/SQLConnection');
+import bodyParser from 'body-parser';
+import express from 'express';
+import session from 'express-session';
+import { SQLConnection } from '../controller/db/SQLConnection';
+import cookieManager from '../routes/cookieManager';
+import spotify from '../routes/spotify';
+import user from '../routes/user';
 
 
 
 class ServerConfig {
+	// Change en une class
+	app: express;
 
 	// Construction a partir des configurations
 	constructor(app) {
@@ -48,7 +49,8 @@ class ServerConfig {
 
 		this.app.use((req, res, next) => {
 			if (req.session?.cookie && req.session.cookie.expires > Date.now()) {
-				userRuntimeDataHandler.delUser();
+				// TODO : DelUser existe pas
+				// userRuntimeDataHandler.delUser();
 			}
 			next();
 		});
@@ -78,4 +80,4 @@ class ServerConfig {
 
 };
 
-module.exports = ServerConfig;
+export = ServerConfig;

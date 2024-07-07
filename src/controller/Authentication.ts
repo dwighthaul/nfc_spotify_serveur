@@ -1,15 +1,14 @@
-const userController = require("./UserController")
+import { userController } from "./db/UserController";
 
 class Authentication {
 
-	constructor(userController) {
-		this.userController = userController;
+	constructor() {
 	}
 
 	verifyLogin(username, password, callback) {
 		//console.log("username", username, "| password", password)
 
-		this.userController.getUserFromUserNameAndPassword(username, password).then((data) => {
+		userController.getUserFromUserNameAndPassword(username, password).then((data) => {
 			// verifier le password
 			//console.log("data", data?.username)
 
@@ -24,6 +23,7 @@ class Authentication {
 	}
 }
 
-const authentication = new Authentication(userController)
+const authentication = new Authentication()
 
-module.exports = authentication
+export { authentication };
+
