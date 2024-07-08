@@ -18,6 +18,6 @@ const port = process.env.SERVEUR_PORT;
 
 
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(Number.parseInt(port), '0.0.0.0', () => {
 	console.log(`Example app listening on port ${port}`)
 })

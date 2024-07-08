@@ -1,7 +1,7 @@
 import { DataTypes, Op } from 'sequelize';
-import NFCTags from '../../model/NFCTags';
-import Role from '../../model/Role';
-import User from '../../model/User';
+import NFCTags from '../../model/dto/db/NFCTags';
+import Role from '../../model/dto/db/Role';
+import User from '../../model/dto/db/User';
 import { rolesController } from './RoleController';
 
 
@@ -41,7 +41,6 @@ class UserController {
 	}
 
 	async getUsers() {
-		// TODO : Ajouter  include: NFCTags, 
 		const users = await User.findAll({ include: [Role, NFCTags] });
 		return users
 	}
@@ -65,10 +64,10 @@ class UserController {
 		})
 	}
 
-	async getUserByUsername(username) {
+	async getUserByUsername(username: string) {
 		return await User.findOne({
 			where: {
-				"username": username
+				"username": { [Op.iLike]: username }
 			}
 		});
 	}
@@ -122,14 +121,10 @@ class UserController {
 
 	async initData() {
 
-		rolesController.getRoleByName("admin").then((roleAdmin) => {
+		return rolesController.getRoleByName("admin").then((roleAdmin) => {
 			const users = User.bulkCreate([
-				{
-					username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=", roleId: roleAdmin.id
-				},
-				{
-					username: "Jorane", clientId: "572c12e9e5c24075a129cb1329b33ca6", clientSecret: "991dcba4bfd744b5bba7c62a98d4d82d", passwordHash: "YWRtaW4=", roleId: roleAdmin.id
-				}
+				{ username: "Dwighthaul", clientId: "b6df1ac233ea4d359790c9a95ccb1ebb", clientSecret: "dea14dbcfe904185b99bee1d5d75ede5", passwordHash: "YWRtaW4=", roleId: roleAdmin.id, },
+				{ username: "Jorane", clientId: "572c12e9e5c24075a129cb1329b33ca6", clientSecret: "991dcba4bfd744b5bba7c62a98d4d82d", passwordHash: "YWRtaW4=", roleId: roleAdmin.id }
 			]).then((tables) => {
 				console.log("Users data have been saved : " + tables.length + " users have been added")
 			});

@@ -16,6 +16,14 @@ export class ProxySpotify {
 
     // La callback defini le send qu'on va faire client
     #handle_response_and_send_to_client(error, response, userSpotifyData, retries, original_request, callbackSuccess, callbackError) {
+        /*
+        console.log("Appel a spotify, essaye numero : ", retries)
+        console.log("response ", response)
+        console.log("userSpotifyData ", userSpotifyData)
+        console.log("original_request ", original_request)
+        console.log("response ", response)
+*/
+
         if (error) {
             // TODO : décider ce qu'il faut return lors d'une erreur request spotify server (500 ou response.codeStatus)
             callbackError(500, logContext + "Error from spotify server");
@@ -38,6 +46,7 @@ export class ProxySpotify {
                         console.warn(logContext + "Orignal_request must always end with a return");
                     })
                     .catch((error) => {
+                        console.log("Appel a spotify en erreur : ", error)
                         callbackError(401, error);
                         return;
                     })
@@ -91,6 +100,61 @@ export class ProxySpotify {
     launchPlaylist(req, res, userSpotifyData, retries = 1) {
         /// Récupérer les arguments
         if (!userSpotifyData) {
+            console.error("userSpotify non trouve")
+            return res.status(500).send("Impossible to get user Spotify data");
+        }
+        const bearer = userSpotifyData.currentAccessTokenBearer;
+        const playlistUri = req.query.playlist_uri;
+        const deviceId = req.query.id_device;
+        console.log("Lancement de la playlist : ", playlistUri, " sur device ", deviceId)
+        if (!(playlistUri && deviceId && bearer)) {
+            console.error("Missing parameter(s)")
+            res.status(400).send('Missing parameter(s)');
+            return;
+        }
+
+        /// Construire la requête
+        const options = {
+            url: "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId,
+            body: {
+                "context_uri": playlistUri,
+                "offset": { "position": 0 },
+                "position_ms": 0
+            },
+            headers: {
+                "Authorization": "Bearer " + bearer,
+            },
+            json: true
+        };
+
+        /// Envoyer la requête
+        request.put(options, (error, response, body) => {
+            console.log(error)
+            this.#handle_response_and_send_to_client(
+                error, response, userSpotifyData, retries,
+                (retries_) => {
+                    this.launchPlaylist(req, res, userSpotifyData, retries_)
+
+                },
+                () => {
+                    res.status(200).send("Playlist successfully started");
+                },
+                (statusCode, message) => {  // error
+                    res.status(statusCode).send(message);
+                }
+            );
+        });
+    }
+
+
+    launchPlaylistFromId(req, res, userSpotifyData, retries = 1) {
+        if (req.query.playlistId) {
+
+        }
+
+
+        /// Récupérer les arguments
+        if (!userSpotifyData) {
             return res.status(500).send("Impossible to get user Spotify data");
         }
         const bearer = userSpotifyData.currentAccessTokenBearer;
@@ -119,7 +183,8 @@ export class ProxySpotify {
         request.put(options, (error, response, body) => {
             this.#handle_response_and_send_to_client(
                 error, response, userSpotifyData, retries,
-                (retries_) => { //launchSongs(req, res, userSpotifyData, retries_) 
+                (retries_) => {
+                    this.launchPlaylist(req, res, userSpotifyData, retries_)
 
                 },
                 () => {

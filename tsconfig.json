@@ -5,7 +5,10 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    //"forceConsistentCasingInFileNames": true,
+    //"alwaysStrict": true,
+    //"noImplicitAny": true
   },
   "lib": [
     "es6"

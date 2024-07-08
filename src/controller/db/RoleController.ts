@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import Role from "../../model/Role";
+import Role from "../../model/dto/db/Role";
 
 
 class RoleController {
@@ -25,7 +25,7 @@ class RoleController {
 	}
 
 	async initData() {
-		Role.bulkCreate([
+		return Role.bulkCreate([
 			{ rolename: "admin", permissions: "read_users,update_user,spotify_login,spotify_run" },
 			{ rolename: "user", permissions: "spotify_login,spotify_run" }
 

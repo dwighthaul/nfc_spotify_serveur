@@ -29,6 +29,19 @@ router.get('/getTags', (req, res) => {
 	});
 });
 
+router.get('/getTagsFromCurentUser', (req, res) => {
+	var userId = req.session?.user?.id
+
+	if (!userId) {
+		res.sendStatus(401).send();
+		return
+
+	}
+
+	nfcTagsController.getTagByUserId(userId).then((data) => {
+		res.send(data);
+	});
+});
 
 
 

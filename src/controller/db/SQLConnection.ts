@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import NFCTags from "../../model/NFCTags";
-import Role from "../../model/Role";
-import User from "../../model/User";
+import NFCTags from "../../model/dto/db/NFCTags";
+import Role from "../../model/dto/db/Role";
+import User from "../../model/dto/db/User";
 import { nfcTagsController } from "./NFCTagsController";
 import { rolesController } from "./RoleController";
 import { userController } from "./UserController";
@@ -37,7 +37,6 @@ class SQLConnection {
 				name: "userId"
 			}
 		});
-
 
 		Role.hasMany(User, {
 			foreignKey: {
